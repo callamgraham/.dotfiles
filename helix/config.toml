@@ -1,0 +1,11 @@
+theme = 'gruvbox'
+
+[editor]
+line-number = "relative"
+idle-timeout = 0
+
+[keys.normal]
+"backspace" = {c = ":sh cargo check", b = ":sh cargo build",r = ":sh cargo run", w = ":sh cargo build --target x86_64-pc-windows-gnu"}
+
+[editor.lsp]
+display-messages = true
