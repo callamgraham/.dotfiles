@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ln -sf ~/.dotfiles/helix/config.toml ~/.config/helix/config.toml
