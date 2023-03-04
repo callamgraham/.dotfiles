@@ -20,10 +20,14 @@ default_border pixel 2
 input * xkb_numlock enable
 
 #monitors
-output HDMI-A-1 pos 0 0 res 1920x1080
 output DP-3 pos 1920 0 res 2560x1440
+output DP-3 adaptive_sync on
+output HDMI-A-1 pos 0 0 res 1920x1080
 set $rm DP-3
 set $lm HDMI-A-1
+
+# set Display port monitor as "Primary" for xrandr so games will start on the right monitor
+exec_always /home/callam/.bin/primary_monitor
 
 ### Variables
 #
@@ -78,6 +82,12 @@ output * bg /home/callam/Pictures/wallpaper/banff.jpg fill
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
+
+
+# mouse settings
+input 5426:132:Razer_Razer_DeathAdder_V2 {
+    pointer_accel -0.6 # set mouse sensitivity (between -1 and 1)
+}
 
 ### Key bindings
 #
@@ -136,7 +146,7 @@ output * bg /home/callam/Pictures/wallpaper/banff.jpg fill
     exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/easyeffects'
     exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/qpwgraph -a /home/callam/.config/patchbay.qpwgraph'
     exec --no-startup-id swaymsg 'workspace 4; exec /usr/bin/alacritty'
-    exec --no-startup-id swaymsg 'workspace 5; exec /usr/bin/element-desktop'
+    exec --no-startup-id swaymsg 'workspace 5; exec /usr/bin/element-desktop --ozone-platform=wayland'
 
     # Switch to workspace
     workspace 1 output $rm

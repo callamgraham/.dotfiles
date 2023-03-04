@@ -9,3 +9,6 @@ idle-timeout = 0
 
 [editor.lsp]
 display-messages = true
+
+[editor.cursor-shape]
+insert = "bar"
