@@ -4,9 +4,8 @@
 
 ;; setup proxy information for windows
 (when (eq system-type 'windows-nt)
-  (setq url-proxy-services
-	'(("http" . "webproxy.bns:8080")
-	  ("https" . "webproxy.bns:8080"))))
+  (setq proxy-file "~/.emacs.d/proxy.el")
+  (load proxy-file))
 
 ;;; Code:
 ; Disable the startup message and screen ie.  Emacs welcome
@@ -65,6 +64,7 @@
 (global-set-key (kbd "<f8>")  'kill-buffer)
 (global-set-key (kbd "C-M-d") 'dired)
 (global-set-key (kbd "<f7>")  'eshell)
+;(global-set-key (kbd "C-<tab>")  'indent-according-to-mode)
 
 ; arrow keys --------------------------------------------------------
 (defun move-right ()
@@ -348,12 +348,18 @@
   :config (projectile-mode)
   :custom ((projectile-completion-system 'ivy))
   :bind-keymap
-  ("C-c p" . projectile-command-map)
+  ("C-M-c C-v" . projectile-command-map)
   :init
   ;; NOTE: Set this to the folder where you keep your Git repos!
+(when (eq system-type 'gnu/linux)
   (when (file-directory-p "~/Projects")
     (setq projectile-project-search-path '("~/Projects/")))
   (setq projectile-switch-project-action #'projectile-dired))
+
+(when (eq system-type 'windows-nt)
+  (when (file-directory-p "~/Projects")
+    (setq projectile-project-search-path '("~/Projects/")))
+  (setq projectile-switch-project-action #'projectile-dired)))
 
 ;; Theme stuff ------------------------------------------------------------------------------------
 
@@ -414,12 +420,13 @@
 ;; Languages ------------------------------------------------------------------------------------
 
 ;; Tree Sitter for highlighting and navigation
+(when (eq system-type 'gnu/linux)
 (use-package tree-sitter-langs)
 (use-package tree-sitter
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
 
 ;; flycheck for checking errors
 (use-package flycheck
@@ -431,7 +438,7 @@
   (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
   :hook
   (python-mode . eglot-ensure)
-  :bind ("C-M-c d" . xref-find-definitions)           ;; go to def
+  :bind ("C-M-c C-u" . xref-find-definitions)           ;; go to def
   )
 
 ;; Rust - only for linux
@@ -485,16 +492,6 @@
   ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
   (setq dired-open-extensions '(("png" . "feh")
                                 ("mkv" . "mpv"))))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(eglot which-key vertico use-package undo-tree tree-sitter-langs tempel rustic ranger projectile orderless marginalia magit lsp-ui lsp-pyright hydra general fzf flycheck evil-nerd-commenter evil-collection eshell-git-prompt doom-themes doom-modeline dired-single dired-open corfu consult cape beacon async all-the-icons-dired)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
