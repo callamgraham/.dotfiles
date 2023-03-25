@@ -65,6 +65,7 @@
 (global-set-key (kbd "C-M-d") 'dired)
 (global-set-key (kbd "<f7>")  'eshell)
 ;(global-set-key (kbd "C-<tab>")  'indent-according-to-mode)
+(global-set-key (kbd "C-M-b")  'comment-line)
 
 ; arrow keys --------------------------------------------------------
 (defun move-right ()
@@ -360,6 +361,10 @@
   (when (file-directory-p "~/Projects")
     (setq projectile-project-search-path '("~/Projects/")))
   (setq projectile-switch-project-action #'projectile-dired)))
+
+; expand region - for selecting "inside stuff"
+(use-package expand-region
+  :bind ("C-M-n" . er/expand-region))
 
 ;; Theme stuff ------------------------------------------------------------------------------------
 
