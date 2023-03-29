@@ -438,18 +438,68 @@
   :ensure t
   :init (global-flycheck-mode))
 
-(use-package eglot
-  :config
-  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
-  :hook
-  (python-mode . eglot-ensure)
-  :bind ("C-M-c C-u" . xref-find-definitions)           ;; go to def
-  )
+
+; unfortunately will be using different LSPs for the different OS's --------------
+(when (eq system-type 'windows-nt) ; eglot for windows
+  (global-set-key (kbd "C-M-c C-z") 'xref-find-definitions)
+    (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point))
+
+(when (eq system-type 'gnu/linux) ; lsp-mode for linux
+  (global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
+    (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point))
+
+(when (eq system-type 'windows-nt) ; eglot for windows
+  (use-package eglot
+    :config
+    (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
+    :hook
+    (python-mode . eglot-ensure)
+  ))
+
+(when (eq system-type 'gnu/linux) ; lsp-mode for linux
+  (use-package lsp-mode
+    :ensure
+    :commands lsp
+    :custom
+    ;; what to use when checking on-save. "check" is default, I prefer clippy
+    (lsp-rust-analyzer-cargo-watch-command "clippy")
+    (lsp-eldoc-render-all t)
+    (lsp-idle-delay 0.6)
+    ;; enable / disable the hints as you prefer:
+    ;; (lsp-rust-analyzer-server-display-inlay-hints t)
+    (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+    (lsp-rust-analyzer-display-chaining-hints t)
+    (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+    (lsp-rust-analyzer-display-closure-return-type-hints t)
+    (lsp-rust-analyzer-display-parameter-hints nil)
+    (lsp-rust-analyzer-display-reborrow-hints nil)
+    :config
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+
+  (use-package lsp-ui
+    :ensure
+    :commands lsp-ui-mode
+    :custom
+    (lsp-ui-peek-always-show t)
+    (lsp-ui-sideline-show-hover t)
+    (lsp-ui-doc-enable nil))
+ ))
 
 ;; Rust - only for linux
 (when (eq system-type 'gnu/linux)
   (use-package rustic
-    :ensure t))
+    :ensure t
+   ))
+
+;; avy movement
+(use-package avy
+  :bind (("C-M-a" . avy-goto-char)
+         ("C-M-'" . avy-goto-line))
+  )
+
+(setq avy-keys-alist
+      `((avy-goto-char . (?a ?s ?e ?t ?i ?r))
+        (avy-goto-line . ,(number-sequence ?1 ?9))))
 
 ;; Eshell ------------------------------------------------------------------------------------
 (defun efs/configure-eshell ()
