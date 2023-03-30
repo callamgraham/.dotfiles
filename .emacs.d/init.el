@@ -16,7 +16,7 @@
 (scroll-bar-mode -1)
 
 ;; Disable the top of screen stuff
-;; (tool-bar-mode -1) ; ie. the icons at the top
+(tool-bar-mode -1) ; ie. the icons at the top
 ;; (tooltip-mode -1)  ; Disable tooltips
 ;; (menu-bar-mode -1) ; Disable the menu bar
 ;; (set-fringe-mode 10) ; Give some breathing room
@@ -62,10 +62,11 @@
 (global-set-key (kbd "<f5>")  'delete-other-windows)
 (global-set-key (kbd "<f6>")  'magit-status)
 (global-set-key (kbd "<f8>")  'kill-buffer)
-(global-set-key (kbd "C-M-d") 'dired)
+(global-set-key (kbd "C-M-S-d") 'dired)
 (global-set-key (kbd "<f7>")  'eshell)
 ;(global-set-key (kbd "C-<tab>")  'indent-according-to-mode)
 (global-set-key (kbd "C-M-b")  'comment-line)
+(global-set-key (kbd "C-M-d")  'pop-global-mark)
 
 ; arrow keys --------------------------------------------------------
 (defun move-right ()
@@ -215,12 +216,13 @@
   ;; line searching, and general fuzzy finding
   (use-package consult
     :bind (("C-M-c C-M-c" . consult-buffer)           ;; buffer switchign
-           ("C-M-m"       . consult-kmacro)           ;; run macro from the macro-rink
+           ("C-M-g"       . consult-kmacro)           ;; run macro from the macro-rink
            ("M-y"         . consult-yank-pop)         ;; pull up the yank-pop list (ie. kill-ring)
            ("C-M-f"       . consult-flymake)          ;; TODO: change to flycheck?
-           ("M-g i"       . consult-imenu)            ;; looks like object search? should look into this..
+           ("C-M-c C-c"   . consult-imenu)            ;; looks like object search? should look into this..
            ("C-f"         . consult-line)             ;; line searching
            ("M-s L"       . consult-line-multi)       ;; apparently allows selection of multiple lines?
+	   ("C-M-c C-x"   . consult-flycheck)         ;; apparently allows selection of multiple lines?
            ("M-s u"       . consult-focus-lines)      ;; hides all lines except lines that fit a search
            ;; ("M-s M-g"     . consult-ripgrep)       ;; ripgrep - will need windows alternative
            ("C-x C-SPC"   . consult-global-mark)      ;; shows the global-mark-ring, will need to figure out
@@ -258,6 +260,8 @@
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
+
+(use-package consult-flycheck)
 
 ;;;; Code Completion
 (use-package corfu
@@ -323,8 +327,6 @@
          :map corfu-map
          ("C-M-i" . tempel-expand))
   :init
-
-
   ;; Setup completion at point
   (defun tempel-setup-capf ()
     (setq-local completion-at-point-functions
@@ -344,23 +346,10 @@
   (add-to-list 'tempel-user-elements #'tempel-include))
 
 ;; projectile helps navigate around "Projects" using some built-in heuristics
-(use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
-  :bind-keymap
-  ("C-M-c C-v" . projectile-command-map)
-  :init
-  ;; NOTE: Set this to the folder where you keep your Git repos!
-(when (eq system-type 'gnu/linux)
-  (when (file-directory-p "~/Projects")
-    (setq projectile-project-search-path '("~/Projects/")))
-  (setq projectile-switch-project-action #'projectile-dired))
-
-(when (eq system-type 'windows-nt)
-  (when (file-directory-p "~/Projects")
-    (setq projectile-project-search-path '("~/Projects/")))
-  (setq projectile-switch-project-action #'projectile-dired)))
+(use-package project
+  :bind (("C-M-c f" . project-find-file)
+         ("C-M-c C-M-p" . project-switch-project))
+  )
 
 ; expand region - for selecting "inside stuff"
 (use-package expand-region
@@ -498,7 +487,7 @@
   )
 
 (setq avy-keys-alist
-      `((avy-goto-char . (?a ?s ?e ?t ?i ?r))
+      `((avy-goto-char . (?a ?s ?e ?t ?i ?r ?c ?m ?n))
         (avy-goto-line . ,(number-sequence ?1 ?9))))
 
 ;; Eshell ------------------------------------------------------------------------------------
@@ -533,6 +522,8 @@
   :ensure nil
   :commands (dired dired-jump)
   :custom ((dired-listing-switches "-agho --group-directories-first")))
+
+(setq dired-kill-when-opening-new-dired-buffer t) ; opening dired will kill existing dired buffers
 
 (use-package dired-single
   :commands (dired dired-jump))
