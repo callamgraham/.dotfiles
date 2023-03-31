@@ -68,79 +68,79 @@
 (global-set-key (kbd "C-M-b")  'comment-line)
 (global-set-key (kbd "C-M-d")  'pop-global-mark)
 
-; arrow keys --------------------------------------------------------
-(defun move-right ()
-  (interactive)
-  (if mark-active
-	(deactivate-mark))
-  (forward-char)
-  )
-(global-set-key (kbd "<right>") 'move-right)
+;; ; arrow keys --------------------------------------------------------
+;; (defun move-right ()
+;;   (interactive)
+;;   (if mark-active
+;; 	(deactivate-mark))
+;;   (forward-char)
+;;   )
+;; (global-set-key (kbd "<right>") 'move-right)
 
-(defun move-left()
-  (interactive)
-  (if mark-active
-      (deactivate-mark))
-    (backward-char)
-  )
-(global-set-key (kbd "<left>") 'move-left)
+;; (defun move-left()
+;;   (interactive)
+;;   (if mark-active
+;;       (deactivate-mark))
+;;     (backward-char)
+;;   )
+;; (global-set-key (kbd "<left>") 'move-left)
 
-; arrow and shift keys -----------------
-(defun move-shift-right ()
-  (interactive)
-  (if (not mark-active)
-      (set-mark-command nil))
-  (forward-char)
-  )
-(global-set-key (kbd "S-<right>") 'move-shift-right)
+;; ; arrow and shift keys -----------------
+;; (defun move-shift-right ()
+;;   (interactive)
+;;   (if (not mark-active)
+;;       (set-mark-command nil))
+;;   (forward-char)
+;;   )
+;; (global-set-key (kbd "S-<right>") 'move-shift-right)
 
-(defun move-shift-left()
-  (interactive)
-  (if (not mark-active)
-      (set-mark-command nil))
-    (backward-char)
-  )
-(global-set-key (kbd "S-<left>") 'move-shift-left)
+;; (defun move-shift-left()
+;;   (interactive)
+;;   (if (not mark-active)
+;;       (set-mark-command nil))
+;;     (backward-char)
+;;   )
+;; (global-set-key (kbd "S-<left>") 'move-shift-left)
 
-; arrow and control -------------------
-(defun jump-right ()
-  "Move forward one word and one space."
-  (interactive)
-  (if mark-active
-	(deactivate-mark))
-  (forward-word 1)
-  (forward-char 1))
-(global-set-key (kbd "C-<right>") 'jump-right)
+;; ; arrow and control -------------------
+;; (defun jump-right ()
+;;   "Move forward one word and one space."
+;;   (interactive)
+;;   (if mark-active
+;; 	(deactivate-mark))
+;;   (forward-word 1)
+;;   (forward-char 1))
+;; (global-set-key (kbd "C-<right>") 'jump-right)
 
-(defun jump-left()
-  "Move backward one word and one space."
-  (interactive)
-  (if mark-active
-	(deactivate-mark))
-  (backward-word 1)
-  (backward-char 1))
-(global-set-key (kbd "C-<left>") 'jump-left)
+;; (defun jump-left()
+;;   "Move backward one word and one space."
+;;   (interactive)
+;;   (if mark-active
+;; 	(deactivate-mark))
+;;   (backward-word 1)
+;;   (backward-char 1))
+;; (global-set-key (kbd "C-<left>") 'jump-left)
 
-; arrow and control -------------------
-(defun jump-shift-right ()
-  "Move forward one word and one space while holding shift."
-  (interactive)
-  (forward-word 1)
-  (forward-char 1)
-  (if (not mark-active)
-      (set-mark-command nil))
-  (backward-word 1))
-(global-set-key (kbd "C-S-<right>") 'jump-shift-right)
+;; ; arrow and control -------------------
+;; (defun jump-shift-right ()
+;;   "Move forward one word and one space while holding shift."
+;;   (interactive)
+;;   (forward-word 1)
+;;   (forward-char 1)
+;;   (if (not mark-active)
+;;       (set-mark-command nil))
+;;   (backward-word 1))
+;; (global-set-key (kbd "C-S-<right>") 'jump-shift-right)
 
-(defun jump-shift-left ()
-  "Move backward one word and one space while holding shift."
-  (interactive)
-  (backward-word 1)
-  (backward-char 1)
-  (if (not mark-active)
-      (set-mark-command nil))
-  (forward-word 1))
-(global-set-key (kbd "C-S-<left>") 'jump-shift-left)
+;; (defun jump-shift-left ()
+;;   "Move backward one word and one space while holding shift."
+;;   (interactive)
+;;   (backward-word 1)
+;;   (backward-char 1)
+;;   (if (not mark-active)
+;;       (set-mark-command nil))
+;;   (forward-word 1))
+;; (global-set-key (kbd "C-S-<left>") 'jump-shift-left)
 
 ;; Font Setup --------------------------------------------------------
 ; Linux font
