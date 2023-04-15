@@ -347,7 +347,7 @@
 
 ;; projectile helps navigate around "Projects" using some built-in heuristics
 (use-package project
-  :bind (("C-M-c f" . project-find-file)
+  :bind (("C-M-c c" . project-find-file)
          ("C-M-c C-M-p" . project-switch-project))
   )
 
@@ -516,6 +516,10 @@
     (setq eshell-visual-commands '("htop" "zsh" "vim"))) ; these commands get run in an external terminal
 
   (eshell-git-prompt-use-theme 'powerline))
+
+;; Vterm
+(when (eq system-type 'gnu/linux)
+  (use-package vterm))
 
 ;; Dired Options ------------------------------------------------------------------------------------
 (use-package dired
