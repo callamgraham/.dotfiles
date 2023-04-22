@@ -18,7 +18,7 @@
 ;; Disable the top of screen stuff
 (tool-bar-mode -1) ; ie. the icons at the top
 ;; (tooltip-mode -1)  ; Disable tooltips
-;; (menu-bar-mode -1) ; Disable the menu bar
+(menu-bar-mode -1) ; Disable the menu bar
 ;; (set-fringe-mode 10) ; Give some breathing room
 (setq warning-minimum-level :error) ; only show warning buffer on errors
 (set-default-coding-systems 'utf-8)
@@ -28,7 +28,7 @@
 ; Line number settings
 (column-number-mode) ; turn on line number mode
 (global-display-line-numbers-mode t) ; display line numbers everywhere
-(setq display-line-numbers-type 'relative) ; use relative line numbers
+;; (setq display-line-numbers-type 'relative) ; use relative line numbers
 (define-key key-translation-map (kbd "ESC") (kbd "C-g")) ; use escape to quit stuff
 
 ; other general stuff
@@ -47,7 +47,21 @@
       create-lockfiles nil)
 
 ; recenter cursor on scroll
-(setq scroll-preserve-screen-position t)
+;; (setq scroll-preserve-screen-position t)
+(defun my-scroll-up ()
+  "Scroll up and recenter."
+  (interactive)
+  (scroll-up)
+  (recenter))
+
+(defun my-scroll-down ()
+  "Scroll down and recenter."
+  (interactive)
+  (scroll-down)
+  (recenter))
+
+(global-set-key [next] 'my-scroll-up)
+(global-set-key [prior] 'my-scroll-down)
 
 ; windows settings ---------------------------------------------------
 ; enable CUA mode so hotkeys act like windows
@@ -57,17 +71,20 @@
 (setq-default cursor-type 'bar)
 
 ; some other general keybindings
+(global-set-key (kbd "<f1>")  'recenter)
 (global-set-key (kbd "<f4>")  'execute-extended-command)
-(global-set-key (kbd "C-s")   'save-buffer)
 (global-set-key (kbd "<f5>")  'delete-other-windows)
 (global-set-key (kbd "<f6>")  'magit-status)
 (global-set-key (kbd "<f8>")  'kill-buffer)
-(global-set-key (kbd "C-M-S-d") 'dired)
 (global-set-key (kbd "<f7>")  'eshell)
+(global-set-key (kbd "<f9>")  'vterm)
+
 ;(global-set-key (kbd "C-<tab>")  'indent-according-to-mode)
 (global-set-key (kbd "C-M-b")  'comment-line)
-(global-set-key (kbd "C-M-d")  'pop-global-mark)
-
+;; (global-set-key (kbd "C-M-d")  'pop-global-mark)
+(global-set-key (kbd "C-M-S-d") 'dired)
+(global-set-key (kbd "C-s")   'save-buffer)
+(global-set-key (kbd "C-a")   'mark-whole-buffer)
 ;; ; arrow keys --------------------------------------------------------
 ;; (defun move-right ()
 ;;   (interactive)
@@ -147,7 +164,7 @@
 (when (eq system-type 'gnu/linux)
   (set-face-attribute 'default nil
                     :family "Source Code Pro"
-                    :height '140
+                    :height '130
                     :weight 'normal
                     :width 'normal))
 ; Windows font
@@ -217,6 +234,7 @@
   (use-package consult
     :bind (("C-M-c C-M-c" . consult-buffer)           ;; buffer switchign
            ("C-M-g"       . consult-kmacro)           ;; run macro from the macro-rink
+	   ("C-M-d"       . consult-mark)             ;; jump through mark ring
            ("M-y"         . consult-yank-pop)         ;; pull up the yank-pop list (ie. kill-ring)
            ("C-M-f"       . consult-flymake)          ;; TODO: change to flycheck?
            ("C-M-c C-c"   . consult-imenu)            ;; looks like object search? should look into this..
@@ -376,9 +394,16 @@
   (doom-themes-org-config))
 
 ;; also use the Doom mode line to make it a bit more pretty
-(use-package doom-modeline
-  :init (doom-modeline-mode 1) ; 1 is the default mode line - set to "t" for the alternative
-  :custom ((doom-modeline-height 20)))
+;; (use-package doom-modeline
+;;   :init (doom-modeline-mode 1) ; 1 is the default mode line - set to "t" for the alternative
+;;   :custom ((doom-modeline-height 20)))
+
+;; may consider using powerline?
+(use-package powerline
+  :ensure t
+  :config
+  ;; Configure powerline
+  (powerline-default-theme))
 
 ;; which key - shows key commands
 (use-package which-key
@@ -481,6 +506,14 @@
    ))
 
 ;; avy movement
+;; set the mark prior to jumping
+
+(defun cig/avy ()
+  (interactive)
+  (set-mark (point))
+  (avy-goto-char)
+  )
+
 (use-package avy
   :bind (("C-M-a" . avy-goto-char)
          ("C-M-'" . avy-goto-line))
@@ -526,6 +559,17 @@
   :ensure nil
   :commands (dired dired-jump)
   :custom ((dired-listing-switches "-agho --group-directories-first")))
+
+(defun my-dired-up-directory ()
+  "Move up one directory in Dired mode."
+  (interactive)
+  (dired-single-up-directory)
+  (recenter))
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (local-set-key (kbd "<left>") 'my-dired-up-directory)
+            (local-set-key (kbd "<right>") 'dired-find-file)))
 
 (setq dired-kill-when-opening-new-dired-buffer t) ; opening dired will kill existing dired buffers
 
