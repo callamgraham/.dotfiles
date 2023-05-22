@@ -63,6 +63,9 @@
 (global-set-key [next] 'my-scroll-up)
 (global-set-key [prior] 'my-scroll-down)
 
+;; backup files
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
 ; windows settings ---------------------------------------------------
 ; enable CUA mode so hotkeys act like windows
 (cua-mode t)
@@ -454,6 +457,10 @@
 (use-package magit
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+;; todo list for magit window
+(use-package magit-todos
+  :config (magit-todos-mode 1))
 
 ;; Languages ------------------------------------------------------------------------------------
 
