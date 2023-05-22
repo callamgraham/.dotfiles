@@ -11,7 +11,7 @@ gaps inner 10
 exec autotiling
 
 # Turn on Streamdeck
-exec /home/callam/.local/bin/start_streamdeck
+# exec /home/callam/.local/bin/start_streamdeck
 
 # remove title bar from windows
 default_border pixel 2
@@ -142,9 +142,9 @@ input 5426:132:Razer_Razer_DeathAdder_V2 {
 # Workspaces:
 #
     # auto start applications in workspaces
-    exec --no-startup-id swaymsg 'workspace 2; exec /usr/bin/firefox'
-    exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/easyeffects'
-    exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/qpwgraph -a /home/callam/.config/patchbay.qpwgraph'
+    # exec --no-startup-id swaymsg 'workspace 2; exec /usr/bin/firefox'
+    # exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/easyeffects'
+    # exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/qpwgraph -a /home/callam/.config/patchbay.qpwgraph'
     exec --no-startup-id swaymsg 'workspace 4; exec /usr/bin/alacritty'
     # exec --no-startup-id swaymsg 'workspace 5; exec /usr/bin/element-desktop --ozone-platform=wayland'
 

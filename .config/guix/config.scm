@@ -19,7 +19,7 @@
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
-  (host-name "antelope")
+  (host-name "Desktop")
   (timezone "America/Toronto")
   (locale "en_US.utf8")
 
@@ -48,6 +48,10 @@
                 (group "users")
                 (supplementary-groups '("wheel"      ;; sudo
 					"netdev"     ;; network devices
+					"input"      ;; input devices
+					"tty"        ;; tty access
+					"kvm"        ;; VMs
+					"netdev"     ;; network devices
                                         "audio"      ;; control audio 
 					"video")))   ;; control video
                %base-user-accounts))
@@ -65,14 +69,28 @@
 		     pipewire
 		     wireplumber
 		     sway
+		     waybar
+		     wofi
                      nss-certs)                  ;; for HTTPS access
                     %base-packages))
 
   ;; Use the "desktop" services, which include the X11
   ;; log-in service, networking with NetworkManager, and more.
-  (services %desktop-services)
+  ;; (services %desktop-services)
 
-  ;; Allow resolution of '.local' host names with mDNS.
+  ;; setup nonguix substitutes
+ (services (modify-services %desktop-services
+             (guix-service-type config => (guix-configuration
+               (inherit config)
+               (substitute-urls
+                (append (list "https://substitutes.nonguix.org")
+                  %default-substitute-urls))
+               (authorized-keys
+                (append (list (local-file "./signing-key.pub"))
+                  %default-authorized-guix-keys))))))
+
+
+ ;; Allow resolution of '.local' host names with mDNS.
   (name-service-switch %mdns-host-lookup-nss))
 
 ;; Channel info
