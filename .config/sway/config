@@ -8,7 +8,7 @@
 gaps inner 10
 
 # Turn on autotiling
-exec autotiling
+# exec autotiling
 
 # Turn on Streamdeck
 # exec /home/callam/.local/bin/start_streamdeck
@@ -48,7 +48,7 @@ set $menu  wofi --show drun -I | xargs swaymsg exec --
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /home/callam/Pictures/wallpaper/banff.jpg fill
+output * bg /home/callam/.wallpaper/banff.jpg fill
 #
 # Example configuration:
 #
@@ -145,7 +145,7 @@ input 5426:132:Razer_Razer_DeathAdder_V2 {
     # exec --no-startup-id swaymsg 'workspace 2; exec /usr/bin/firefox'
     # exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/easyeffects'
     # exec --no-startup-id swaymsg 'workspace 3; exec /usr/bin/qpwgraph -a /home/callam/.config/patchbay.qpwgraph'
-    exec --no-startup-id swaymsg 'workspace 4; exec /usr/bin/alacritty'
+    exec --no-startup-id swaymsg 'workspace 4; exec /run/current-system/profile/bin/alacritty'
     # exec --no-startup-id swaymsg 'workspace 5; exec /usr/bin/element-desktop --ozone-platform=wayland'
 
     # Switch to workspace

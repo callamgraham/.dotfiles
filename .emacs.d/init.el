@@ -25,9 +25,12 @@
 
 (setq visible-bell t); Set up the visible bell
 
-; Line number settings
-(column-number-mode) ; turn on line number mode
-(global-display-line-numbers-mode t) ; display line numbers everywhere
+;; ;; Enable line numbers in all buffers
+;; (global-linum-mode t)
+
+;; ;; Disable line numbers in eshell buffers
+;; (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode 0)))
+
 ;; (setq display-line-numbers-type 'relative) ; use relative line numbers
 (define-key key-translation-map (kbd "ESC") (kbd "C-g")) ; use escape to quit stuff
 
@@ -585,7 +588,7 @@
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)
-  (use-package vterm))
+ (use-package vterm))
 
 ;; Dired Options ------------------------------------------------------------------------------------
 (use-package dired
@@ -620,15 +623,15 @@
   (setq dired-open-extensions '(("png" . "feh")
                                 ("mkv" . "mpv"))))
 
-(use-package dired-hide-dotfiles)
+;; (use-package dired-hide-dotfiles)
 
-(defun my-dired-mode-hook ()
-  ;; To hide dot-files by default
-  (dired-hide-dotfiles-mode))
+;; (defun my-dired-mode-hook ()
+;;   ;; To hide dot-files by default
+;;   (dired-hide-dotfiles-mode))
 
-;; To toggle hiding
-(define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
-(add-hook 'dired-mode-hook #'my-dired-mode-hook)
+;; ;; To toggle hiding
+;; (define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
+;; (add-hook 'dired-mode-hook #'my-dired-mode-hook)
 
 ;; Org stuff ------------------------------------------------------------------------------------
 (use-package org)
@@ -642,3 +645,6 @@
 ;; matrix client
 (use-package ement)
 
+;; Guix ------------------------------------------------------------------------------------
+(use-package geiser-guile)
+(use-package guix)

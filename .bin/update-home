@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+guix home reconfigure ~/.dotfiles/.config/guix/home-configuration.scm
