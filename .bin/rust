@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd ~
+guix shell --network --container --emulate-fhs --preserve='^DISPLAY$' bash coreutils curl grep nss-certs gcc-objc:lib gcc-toolchain pkg-config glib git emacs --share=$HOME/Projects/Rust=$HOME
