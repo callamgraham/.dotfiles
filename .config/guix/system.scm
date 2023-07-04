@@ -10,13 +10,14 @@
 ;; Indicate which modules to import to access the variables
 ;; used in this configuration.
 (use-modules 
-  (gnu) 
+  (gnu)
+  (gnu home services)
   (gnu packages linux)
   (nongnu packages linux)
   (nongnu system linux-initrd)
   )
-(use-package-modules terminals certs wm xdisorg vim gl)
-(use-service-modules cups desktop networking ssh xorg)
+(use-package-modules terminals certs wm xdisorg vim gl package-management)
+(use-service-modules cups desktop networking ssh xorg nix sddm)
 
 ;; Modify configurations of default %desktop-services
 (define %my-desktop-services
@@ -36,7 +37,15 @@
                                                                   (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)
                                                                  )
                                                                 )"))
-			      %default-authorized-guix-keys))))))
+			      %default-authorized-guix-keys))))
+
+		   (delete gdm-service-type)
+		   ;; (gdm-service-type config =>
+				     ;; (gdm-configuration
+				      ;; (inherit config)
+				      ;; (wayland? #t)))
+
+		   ))
 
 
 (operating-system
@@ -70,6 +79,7 @@
 		      mesa
 		      pipewire
 		      wireplumber
+		      nix
 		      alacritty)
                     %base-packages))
 
@@ -85,7 +95,16 @@
 ;           ;; are appending to.
 ;           %base-services))
 
-  (services %my-desktop-services)
+  (services (append (list
+			  ;; configure env variables
+			  (simple-service 'my-custom-env-vars-service
+					  home-environment-variables-service-type
+					  `(("GUIX_SANDBOX_HOME" . "/extra/nvme1/sandbox")
+					    ("EDITOR" . "emacsclient")
+					    ("XDG_CURRENT_DESKTOP" . "sway")))
+			  (service nix-service-type)
+			  (service sddm-service-type))
+		    %my-desktop-services))
   
   (bootloader (bootloader-configuration
                 (bootloader grub-efi-bootloader)

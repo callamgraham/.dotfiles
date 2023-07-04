@@ -19,7 +19,8 @@
 				      "steam"
 				      ;; "dolphin-emu"
 				      "xrandr" ; for the primary_monitor script
-
+				      "sdl" ; for running some games like cs:go in wayland
+				      
 				      ;; sys admin
                                       "parted"
                                       "stow"
@@ -27,10 +28,19 @@
 				      "openssh"
 				      "pinentry"
 				      "dunst"
+				      "flatpak"
+				      "nix"
+				      "ntfs-3g" ; for ntfs drives
+				      "zip"
+				      "unzip"
+				      "xdg-user-dirs"
+				      "p7zip"
+				      "neofetch"
+				      ;; "pantalaimon" ; for ement encrypted
 				      
 				      ;; browser
 				      "firefox"
-                                      "ungoogled-chromium"
+                                      ;; "ungoogled-chromium"
 
 				      ;; fonts/icons
 				      "font-google-noto"
@@ -40,14 +50,18 @@
 
 				      ;; media
 				      "pavucontrol"
+				      "handbrake"
+				      "mpv" ;
+				      "feh"
 				      
 				      ;; programming
 				      "cmake"
-				      "gcc"
+				      "gcc-toolchain"
+				      "gcc-objc:lib"
                                       "git"				   
-				      "emacs"
 				      "python"
-				      
+
+				      ;; other...
                                       "vim")))
 
   ;; Below is the list of Home services.  To search for available

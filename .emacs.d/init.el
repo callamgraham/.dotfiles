@@ -171,7 +171,7 @@
 
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
-  (interactive "cEnter a character: ")
+  (interactive "Enter a character: ")
   (when (region-active-p)
     (let ((start (region-beginning))
           (end (region-end)))
@@ -215,7 +215,13 @@
 
 ;; I'll be using "use-package" for package management
 ;; make sure the use-package package is installed
-(setq use-package-always-ensure t)
+(if (eq system-type 'gnu/linux)
+    ;; using Guix for linux
+    (setq use-package-always-ensure nil)
+  
+  (setq use-package-always-ensure t)
+  )
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -359,7 +365,6 @@
 
 ;; Templates takes advantage of emacs's tempo
 (use-package tempel
-  :ensure t
   :defer 10
   :hook ((prog-mode text-mode) . tempel-setup-capf)
   :bind (("M-+" . tempel-insert) ;; Alternative tempel-expand
@@ -401,7 +406,6 @@
 ;; Theme stuff ------------------------------------------------------------------------------------
 
 (use-package doom-themes
-  :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -425,7 +429,6 @@
 
 ;; may consider using powerline?
 (use-package powerline
-  :ensure t
   :config
   ;; Configure powerline
   (powerline-default-theme))
@@ -471,6 +474,7 @@
 (when (eq system-type 'gnu/linux)
 (use-package tree-sitter-langs)
 (use-package tree-sitter
+  :ensure t
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
@@ -478,7 +482,6 @@
 
 ;; flycheck for checking errors
 (use-package flycheck
-  :ensure t
   :init (global-flycheck-mode))
 
 
@@ -501,7 +504,6 @@
 
 (when (eq system-type 'gnu/linux) ; lsp-mode for linux
   (use-package lsp-mode
-    :ensure
     :commands lsp
     :custom
     ;; what to use when checking on-save. "check" is default, I prefer clippy
@@ -520,7 +522,6 @@
     (add-hook 'lsp-mode-hook 'lsp-ui-mode)
 
   (use-package lsp-ui
-    :ensure
     :commands lsp-ui-mode
     :custom
     (lsp-ui-peek-always-show t)
@@ -573,6 +574,7 @@
         eshell-scroll-to-bottom-on-input t))
 
 (use-package eshell-git-prompt
+  :ensure t ; no guix?
   :after eshell)
 
 (use-package eshell
@@ -592,9 +594,15 @@
 
 ;; Dired Options ------------------------------------------------------------------------------------
 (use-package dired
-  :ensure nil
   :commands (dired dired-jump)
   :custom ((dired-listing-switches "-agho --group-directories-first")))
+
+(setq dired-omit-files
+    (rx (or (seq bol (? ".") "#")     ;; emacs autosave files
+        (seq bol "." (not (any "."))) ;; dot-files
+        (seq "~" eol)                 ;; backup-files
+        (seq bol "CVS" eol)           ;; CVS dirs
+        )))
 
 (defun my-dired-up-directory ()
   "Move up one directory in Dired mode."
@@ -604,24 +612,18 @@
 
 (add-hook 'dired-mode-hook
           (lambda ()
+            (local-set-key (kbd ".") 'dired-omit-mode)
             (local-set-key (kbd "<left>") 'my-dired-up-directory)
             (local-set-key (kbd "<right>") 'dired-find-file)))
 
 (setq dired-kill-when-opening-new-dired-buffer t) ; opening dired will kill existing dired buffers
 
 (use-package dired-single
+  :ensure t ;; no guix
   :commands (dired dired-jump))
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package dired-open
-  :commands (dired dired-jump)
-  :config
-  ;; Doesn't work as expected!
-  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-  (setq dired-open-extensions '(("png" . "feh")
-                                ("mkv" . "mpv"))))
 
 ;; (use-package dired-hide-dotfiles)
 
