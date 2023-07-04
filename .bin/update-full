@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+guix pull
+update-system
+guix home reconfigure ~/.dotfiles/.config/guix/home-configuration.scm
+
