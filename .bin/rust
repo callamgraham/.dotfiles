@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 cd ~
-guix shell --network --container --emulate-fhs --preserve='^DISPLAY$' bash coreutils curl grep nss-certs gcc-objc:lib gcc-toolchain pkg-config glib git emacs --share=$HOME/Projects/Rust=$HOME
+guix shell --network --container --emulate-fhs -m ~/.manifests/rust_dev.scm -m ~/.manifests/emacs.scm --preserve='^DISPLAY$' --share=$HOME/Projects/Rust=$HOME --expose=$HOME/.emacs.d/init.el=$HOME/.emacs.d/init.el
