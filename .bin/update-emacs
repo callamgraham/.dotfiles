@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+guix package -m ~/.dotfiles/.manifests/emacs.scm -p ~/.guix-extra-profiles/emacs/

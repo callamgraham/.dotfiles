@@ -29,18 +29,17 @@
 				      "pinentry"
 				      "dunst"
 				      "flatpak"
-				      "nix"
+				      ;; "nix"
 				      "ntfs-3g" ; for ntfs drives
 				      "zip"
 				      "unzip"
 				      "xdg-user-dirs"
 				      "p7zip"
-				      "neofetch"
-				      ;; "pantalaimon" ; for ement encrypted
+				      "neofetch" ; shows user info
+				      "pantalaimon" ; for ement encrypted
 				      
 				      ;; browser
 				      "firefox"
-                                      ;; "ungoogled-chromium"
 
 				      ;; fonts/icons
 				      "font-google-noto"
@@ -49,6 +48,7 @@
 				      "breeze-icons"
 
 				      ;; media
+				      "qpwgraph"
 				      "pavucontrol"
 				      "handbrake"
 				      "mpv" ;
