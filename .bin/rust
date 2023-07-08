@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 cd ~
-guix shell --network --container --emulate-fhs -m ~/.manifests/rust_dev.scm -m ~/.manifests/emacs.scm --preserve='^DISPLAY$' --share=$HOME/Projects/Rust=$HOME --expose=$HOME/.emacs.d/init.el=$HOME/.emacs.d/init.el
+# guix shell --network --container --emulate-fhs --profile=/home/callam/.guix-extra-profiles/rust-dev --preserve='^DISPLAY$' --share=$HOME/Projects/Rust=$HOME --expose=$HOME/.emacs.d/init.el=$HOME/.emacs.d/init.el --expose=$HOME/.ssh=$HOME/.ssh
+
+guix shell --network --container --emulate-fhs -m /home/callam/.dotfiles/.manifests/rust_dev.scm -m /home/callam/.dotfiles/.manifests/emacs.scm --preserve='^DISPLAY$' --share=$HOME/Projects/Rust=$HOME --expose=$HOME/.emacs.d/init.el=$HOME/.emacs.d/init.el --expose=$HOME/.ssh=$HOME/.ssh --expose=$HOME/.bin/rust-shell-init=$HOME/.bin/rust-shell-init -- ~/.bin/rust-shell-init 

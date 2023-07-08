@@ -4,6 +4,27 @@
 ;; need to capture the channels being used, as returned by "guix describe".
 ;; See the "Replicating Guix" section in the manual.
 
+;; some utilities courtesy of David Wilson, for pulling manifests
+(define (read-manifest manifest-path)
+  (with-input-from-file manifest-path
+    (lambda ()
+      (read))))
+
+(define (gather-manifest-packages manifests)
+  (if (pair? manifests)
+      (begin
+        (let ((manifest (read-manifest (string-append
+                                        "/home/callam/.dotfiles/.manifests/"
+                                        (symbol->string (car manifests))
+                                        ".scm"))))
+
+          (append (map specification->package+output
+                       (cadadr manifest))
+                  (gather-manifest-packages (cdr manifests)))))
+      '()))
+
+
+
 (use-modules (gnu home)
              (gnu packages)
              (gnu services)
@@ -14,7 +35,9 @@
 (home-environment
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
- (packages (specifications->packages (list
+ (packages
+  (append (gather-manifest-packages '(emacs))
+  (specifications->packages (list
 				      ;; gaming
 				      "steam"
 				      ;; "dolphin-emu"
@@ -41,6 +64,10 @@
 				      ;; browser
 				      "firefox"
 
+				      ;; office
+				      "libreoffice"
+				      "evince"
+				      
 				      ;; fonts/icons
 				      "font-google-noto"
                                       "font-adobe-source-code-pro"
@@ -62,7 +89,7 @@
 				      "python"
 
 				      ;; other...
-                                      "vim")))
+                                      "vim"))))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.

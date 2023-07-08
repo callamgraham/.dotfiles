@@ -95,79 +95,6 @@
 (global-set-key (kbd "C-M-S-d") 'dired-jump)
 (global-set-key (kbd "C-s")   'save-buffer)
 (global-set-key (kbd "C-a")   'mark-whole-buffer)
-;; ; arrow keys --------------------------------------------------------
-;; (defun move-right ()
-;;   (interactive)
-;;   (if mark-active
-;; 	(deactivate-mark))
-;;   (forward-char)
-;;   )
-;; (global-set-key (kbd "<right>") 'move-right)
-
-;; (defun move-left()
-;;   (interactive)
-;;   (if mark-active
-;;       (deactivate-mark))
-;;     (backward-char)
-;;   )
-;; (global-set-key (kbd "<left>") 'move-left)
-
-;; ; arrow and shift keys -----------------
-;; (defun move-shift-right ()
-;;   (interactive)
-;;   (if (not mark-active)
-;;       (set-mark-command nil))
-;;   (forward-char)
-;;   )
-;; (global-set-key (kbd "S-<right>") 'move-shift-right)
-
-;; (defun move-shift-left()
-;;   (interactive)
-;;   (if (not mark-active)
-;;       (set-mark-command nil))
-;;     (backward-char)
-;;   )
-;; (global-set-key (kbd "S-<left>") 'move-shift-left)
-
-;; ; arrow and control -------------------
-;; (defun jump-right ()
-;;   "Move forward one word and one space."
-;;   (interactive)
-;;   (if mark-active
-;; 	(deactivate-mark))
-;;   (forward-word 1)
-;;   (forward-char 1))
-;; (global-set-key (kbd "C-<right>") 'jump-right)
-
-;; (defun jump-left()
-;;   "Move backward one word and one space."
-;;   (interactive)
-;;   (if mark-active
-;; 	(deactivate-mark))
-;;   (backward-word 1)
-;;   (backward-char 1))
-;; (global-set-key (kbd "C-<left>") 'jump-left)
-
-;; ; arrow and control -------------------
-;; (defun jump-shift-right ()
-;;   "Move forward one word and one space while holding shift."
-;;   (interactive)
-;;   (forward-word 1)
-;;   (forward-char 1)
-;;   (if (not mark-active)
-;;       (set-mark-command nil))
-;;   (backward-word 1))
-;; (global-set-key (kbd "C-S-<right>") 'jump-shift-right)
-
-;; (defun jump-shift-left ()
-;;   "Move backward one word and one space while holding shift."
-;;   (interactive)
-;;   (backward-word 1)
-;;   (backward-char 1)
-;;   (if (not mark-active)
-;;       (set-mark-command nil))
-;;   (forward-word 1))
-;; (global-set-key (kbd "C-S-<left>") 'jump-shift-left)
 
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
@@ -237,8 +164,8 @@
 
 ;; no-littering doesn't set this by default so we must place
 ;; auto save files in the same path as it uses for sessions
-;;(setq auto-save-file-name-transforms
-;;      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+(setq auto-save-file-name-transforms
+     `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
 ;; ASYNC
 ;; helps improve performance
@@ -504,30 +431,30 @@
 
 (when (eq system-type 'gnu/linux) ; lsp-mode for linux
   (use-package lsp-mode
-    :commands lsp
-    :custom
-    ;; what to use when checking on-save. "check" is default, I prefer clippy
-    (lsp-rust-analyzer-cargo-watch-command "clippy")
-    (lsp-eldoc-render-all t)
-    (lsp-idle-delay 0.6)
-    ;; enable / disable the hints as you prefer:
-    ;; (lsp-rust-analyzer-server-display-inlay-hints t)
-    (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
-    (lsp-rust-analyzer-display-chaining-hints t)
-    (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
-    (lsp-rust-analyzer-display-closure-return-type-hints t)
-    (lsp-rust-analyzer-display-parameter-hints nil)
-    (lsp-rust-analyzer-display-reborrow-hints nil)
-    :config
-    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  :commands lsp
+  :custom
+  ;; what to use when checking on-save. "check" is default, I prefer clippy
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 0.6)
+  ;; enable / disable the hints as you prefer:
+  (lsp-rust-analyzer-server-display-inlay-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  (lsp-rust-analyzer-display-closure-return-type-hints t)
+  (lsp-rust-analyzer-display-parameter-hints nil)
+  (lsp-rust-analyzer-display-reborrow-hints nil)
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
-  (use-package lsp-ui
-    :commands lsp-ui-mode
-    :custom
-    (lsp-ui-peek-always-show t)
-    (lsp-ui-sideline-show-hover t)
-    (lsp-ui-doc-enable nil))
- ))
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-peek-always-show t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-doc-enable nil))
+  )
 
 ;; python stuff
 ;; (add-hook 'python-mode-hook
@@ -547,7 +474,9 @@
 	 ("C-c C-c c" . rustic-cargo-check)     ;swap check and clean
 	 ("C-c C-c C-k" . rustic-cargo-clean)   ;swap check and clean
 	 )
-  ))
+    :config
+    (add-hook 'rust-mode 'lsp-mode)
+    ))
 
 
 ;; avy movement

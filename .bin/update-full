@@ -10,5 +10,5 @@ sudo -E guix system reconfigure ~/.config/guix/system.scm
 # update home
 guix home reconfigure ~/.dotfiles/.config/guix/home-configuration.scm
 
-# update emacs
-guix package -m ~/.dotfiles/.manifests/emacs.scm -p ~/.guix-extra-profiles/emacs/
+# update rust-dev
+guix package -m ~/.dotfiles/.manifests/emacs.scm -m ~/.dotfiles/.manifests/rust_dev.scm -p ~/.guix-extra-profiles/rust-dev
