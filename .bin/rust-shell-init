@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# source the profile to add cargo to the PATH
+source ./.profile
+
+# launch emacs
+emacs
