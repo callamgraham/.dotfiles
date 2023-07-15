@@ -13,7 +13,8 @@
    "glibc:static"
    "git"
    "rust-gcc"
-      
+   "sqlite"
+   
    ;; fonts/icons
    "font-adobe-source-code-pro"
    ))
