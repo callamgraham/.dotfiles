@@ -467,20 +467,22 @@
 
 ;; Rust - only for linux
 (when (eq system-type 'gnu/linux)
-  (use-package rustic
-    :bind (:map rustic-mode-map
-	 ("C-c C-c C-c C-c b" . rustic-cargo-build)     ;swap build and bench
-         ("C-c C-c C-b" . rustic-cargo-bench)   ;swap build and bench
-         ("C-c C-c C-r" . rustic-cargo-rm)      ;swap rm and run
-	 ("C-c C-c r" . rustic-cargo-run)       ;swap rm and run
-	 ("C-c C-c t" . rustic-cargo-test)      ;rebind test
-	 ("C-c C-c c" . rustic-cargo-check)     ;swap check and clean
-	 ("C-c C-c C-k" . rustic-cargo-clean)   ;swap check and clean
-	 )
-    :config
-    (add-hook 'rust-mode 'lsp-mode)
-    ))
+  (use-package rustic)
+  )
 
+;; can't seem to get this to work with use-package so putting it here
+(add-hook 'rustic-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c C-c r") 'rustic-cargo-run)     ; swap run and rm
+            (local-set-key (kbd "C-c C-c C-r") 'rustic-cargo-rm)
+	    (local-set-key (kbd "C-c C-c b") 'rustic-cargo-build)   ; swap build and bench
+            (local-set-key (kbd "C-c C-c C-b") 'rustic-cargo-bench)
+	    (local-set-key (kbd "C-c C-c c") 'rustic-cargo-check)   ; swap check and clean
+            (local-set-key (kbd "C-c C-c C-k") 'rustic-cargo-clean)
+	    (local-set-key (kbd "C-c C-c t") 'rustic-cargo-test)    ; rebind test
+
+	    )
+	  )
 
 ;; avy movement
 (use-package avy
