@@ -26,9 +26,9 @@
    "emacs-avy"
    "emacs-vterm"
    "emacs-all-the-icons-dired"
-   "emacs-vterm"
    "libvterm"
    "emacs-ement"
    "emacs-geiser-guile"
    "emacs-guix"
+   "emacs-dired-hacks" 
    ))

@@ -72,6 +72,7 @@
 				      "font-google-noto"
                                       "font-adobe-source-code-pro"
 				      "font-awesome"
+				      "font-jetbrains-mono"
 				      "breeze-icons"
 
 				      ;; media

@@ -19,7 +19,7 @@
 (tool-bar-mode -1) ; ie. the icons at the top
 ;; (tooltip-mode -1)  ; Disable tooltips
 (menu-bar-mode -1) ; Disable the menu bar
-;; (set-fringe-mode 10) ; Give some breathing room
+(set-fringe-mode 10) ; Give some breathing room
 (setq warning-minimum-level :error) ; only show warning buffer on errors
 (set-default-coding-systems 'utf-8)
 
@@ -49,6 +49,7 @@
 (setq delete-by-moving-to-trash t
       create-lockfiles nil)
 
+
 ; recenter cursor on scroll
 ;; (setq scroll-preserve-screen-position t)
 (defun my-scroll-up ()
@@ -72,6 +73,8 @@
 ; windows settings ---------------------------------------------------
 ; enable CUA mode so hotkeys act like windows
 (cua-mode t)
+(delete-selection-mode 1)
+
 
 ; use line for the cursor
 (setq-default cursor-type 'bar)
@@ -98,7 +101,7 @@
 
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
-  (interactive "Enter a character: ")
+  (interactive "cEnter a character: ")
   (when (region-active-p)
     (let ((start (region-beginning))
           (end (region-end)))
@@ -113,10 +116,10 @@
 ; Linux font
 (when (eq system-type 'gnu/linux)
   (set-face-attribute 'default nil
-                    :family "Source Code Pro"
-                    :height '130
-                    :weight 'normal
-                    :width 'normal))
+                    :family "JetBrains Mono"
+                    :height '120
+                    :weight 'light
+                    ))
 ; Windows font
 (when (eq system-type 'windows-nt)
   (set-face-attribute 'default nil
@@ -291,34 +294,34 @@
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
 
 ;; Templates takes advantage of emacs's tempo
-(use-package tempel
-  :defer 10
-  :hook ((prog-mode text-mode) . tempel-setup-capf)
-  :bind (("M-+" . tempel-insert) ;; Alternative tempel-expand
-         :map tempel-map
-         ([remap keyboard-escape-quit] . tempel-done)
-         ;; ("TAB" . tempel-next)
-         ;; ("<backtab>" . tempel-previous)
-         :map corfu-map
-         ("C-M-i" . tempel-expand))
-  :init
-  ;; Setup completion at point
-  (defun tempel-setup-capf ()
-    (setq-local completion-at-point-functions
-                (cons #'tempel-complete
-                      completion-at-point-functions)))
-  (add-hook 'prog-mode-hook 'tempel-setup-capf)
-  (add-hook 'text-mode-hook 'tempel-setup-capf)
-  (add-hook 'lsp-mode-hook 'tempel-setup-capf)
-  (add-hook 'sly-mode-hook 'tempel-setup-capf)
-  :config
-  (defun tempel-include (elt)
-    (when (eq (car-safe elt) 'i)
-      (if-let (template (alist-get (cadr elt) (tempel--templates)))
-          (cons 'l template)
-        (message "Template %s not found" (cadr elt))
-        nil)))
-  (add-to-list 'tempel-user-elements #'tempel-include))
+;; (use-package tempel
+;;   :defer 10
+;;   :hook ((prog-mode text-mode) . tempel-setup-capf)
+;;   :bind (("M-+" . tempel-insert) ;; Alternative tempel-expand
+;;          :map tempel-map
+;;          ([remap keyboard-escape-quit] . tempel-done)
+;;          ;; ("TAB" . tempel-next)
+;;          ;; ("<backtab>" . tempel-previous)
+;;          :map corfu-map
+;;          ("C-M-i" . tempel-expand))
+;;   :init
+;;   ;; Setup completion at point
+;;   (defun tempel-setup-capf ()
+;;     (setq-local completion-at-point-functions
+;;                 (cons #'tempel-complete
+;;                       completion-at-point-functions)))
+;;   (add-hook 'prog-mode-hook 'tempel-setup-capf)
+;;   (add-hook 'text-mode-hook 'tempel-setup-capf)
+;;   (add-hook 'lsp-mode-hook 'tempel-setup-capf)
+;;   (add-hook 'sly-mode-hook 'tempel-setup-capf)
+;;   :config
+;;   (defun tempel-include (elt)
+;;     (when (eq (car-safe elt) 'i)
+;;       (if-let (template (alist-get (cadr elt) (tempel--templates)))
+;;           (cons 'l template)
+;;         (message "Template %s not found" (cadr elt))
+;;         nil)))
+;;   (add-to-list 'tempel-user-elements #'tempel-include))
 
 ;; projectile helps navigate around "Projects" using some built-in heuristics
 (use-package project
@@ -337,7 +340,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'doom-palenight t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -466,7 +469,7 @@
 (when (eq system-type 'gnu/linux)
   (use-package rustic
     :bind (:map rustic-mode-map
-	 ("C-c C-c b" . rustic-cargo-build)     ;swap build and bench
+	 ("C-c C-c C-c C-c b" . rustic-cargo-build)     ;swap build and bench
          ("C-c C-c C-b" . rustic-cargo-bench)   ;swap build and bench
          ("C-c C-c C-r" . rustic-cargo-rm)      ;swap rm and run
 	 ("C-c C-c r" . rustic-cargo-run)       ;swap rm and run
@@ -526,12 +529,20 @@
   :commands (dired dired-jump)
   :custom ((dired-listing-switches "-agho --group-directories-first")))
 
+(require 'dired-x)
+
 (setq dired-omit-files
     (rx (or (seq bol (? ".") "#")     ;; emacs autosave files
         (seq bol "." (not (any "."))) ;; dot-files
         (seq "~" eol)                 ;; backup-files
         (seq bol "CVS" eol)           ;; CVS dirs
         )))
+
+;; some dired settings from david wilson
+(setq dired-listing-switches "-agho --group-directories-first"
+      dired-omit-verbose nil
+      dired-hide-details-hide-symlink-targets nil
+      delete-by-moving-to-trash t)
 
 (defun my-dired-up-directory ()
   "Move up one directory in Dired mode."
@@ -541,6 +552,8 @@
 
 (add-hook 'dired-mode-hook
           (lambda ()
+	    (dired-omit-mode 1)
+	    (dired-hide-details-mode 1)
             (local-set-key (kbd ".") 'dired-omit-mode)
             (local-set-key (kbd "<left>") 'my-dired-up-directory)
             (local-set-key (kbd "<right>") 'dired-find-file)))
@@ -579,3 +592,8 @@
 ;; Guix ------------------------------------------------------------------------------------
 (use-package geiser-guile)
 (use-package guix)
+
+
+;; Element Chat -----------------------------------------------------------------------------------
+
+;; TODO need to add element, but only load if SHELL_LEVEL is set to zero (if not its in a shell)
