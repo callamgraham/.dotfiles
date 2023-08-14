@@ -79,12 +79,11 @@
 ; use line for the cursor
 (setq-default cursor-type 'bar)
 
-; some other general keybindings
+; some 'other general' keybindings
 ; global prefix key:
 (define-prefix-command 'my-prefix-map)
 (global-set-key (kbd "C-M-c") 'my-prefix-map)
-
-(global-set-key (kbd "<f1>")  'recenter)
+(global-set-key (kbd "<f2>")  'recenter)
 (global-set-key (kbd "<f4>")  'execute-extended-command)
 (global-set-key (kbd "<f5>")  'delete-other-windows)
 (global-set-key (kbd "<f6>")  'magit-status)
@@ -94,10 +93,14 @@
 
 (global-set-key (kbd "TAB")  'indent-according-to-mode)
 (global-set-key (kbd "C-M-b")  'comment-line)
-;; (global-set-key (kbd "C-M-d")  'pop-global-mark)
 (global-set-key (kbd "C-M-S-d") 'dired-jump)
 (global-set-key (kbd "C-s")   'save-buffer)
 (global-set-key (kbd "C-a")   'mark-whole-buffer)
+
+;; Macro keybindings
+(global-set-key (kbd "C-M-S-v")   'kmacro-start-macro)
+(global-set-key (kbd "C-M-v")   'kmacro-end-macro)
+(global-set-key (kbd "C-M-g")   'kmacro-call-macro)
 
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
@@ -194,7 +197,7 @@
   ;; line searching, and general fuzzy finding
   (use-package consult
     :bind (("C-M-c C-M-c" . consult-buffer)           ;; buffer switchign
-           ("C-M-g"       . consult-kmacro)           ;; run macro from the macro-rink
+           ("C-M-c g"       . consult-kmacro)           ;; run macro from the macro-rink
 	   ("C-M-d"       . consult-mark)             ;; jump through mark ring
            ("M-y"         . consult-yank-pop)         ;; pull up the yank-pop list (ie. kill-ring)
            ("C-M-c C-c"   . consult-imenu)            ;; looks like object search? should look into this..
