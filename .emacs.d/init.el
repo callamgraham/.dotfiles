@@ -150,7 +150,7 @@
 ;; make sure the use-package package is installed
 (if (eq system-type 'gnu/linux)
     ;; using Guix for linux
-    (setq use-package-always-ensure nil)
+    (setq use-package-always-ensure t) ; switching to arch
   
   (setq use-package-always-ensure t)
   )
@@ -595,8 +595,8 @@
 (use-package ement)
 
 ;; Guix ------------------------------------------------------------------------------------
-(use-package geiser-guile)
-(use-package guix)
+;; (use-package geiser-guile)
+;; (use-package guix)
 
 
 ;; Element Chat -----------------------------------------------------------------------------------
