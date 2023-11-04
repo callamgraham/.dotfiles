@@ -105,6 +105,14 @@
 (global-set-key (kbd "C-M-v")   'kmacro-end-macro)
 (global-set-key (kbd "C-M-g")   'kmacro-call-macro)
 
+;; Window management
+(global-set-key (kbd "C-M-c v")   'split-window-vertically)
+(global-set-key (kbd "C-M-c h")   'split-window-horizontally)
+(global-set-key (kbd "C-M-c <up>")   'windmove-up)
+(global-set-key (kbd "C-M-c <down>")   'windmove-down)
+(global-set-key (kbd "C-M-c <left>")   'windmove-left)
+(global-set-key (kbd "C-M-c <right>")   'windmove-right)
+
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
   (interactive "cEnter a character: ")
