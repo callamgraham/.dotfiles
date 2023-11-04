@@ -122,7 +122,49 @@
       (goto-char start)
       (insert-char char)
       (goto-char (+ end 1))
-      (insert-char char))))
+      (if (char-equal char ?\()
+          (insert-char ?\))
+        (insert-char char))
+      )))
+
+(defun insert-matching-parenthesis ()
+  "Insert a matching parenthesis in programming modes and move the cursor back by one character."
+  (interactive)
+  (insert "()")
+  (backward-char))
+
+(defun insert-matching-brackets ()
+  "Insert a matching parenthesis in programming modes and move the cursor back by one character."
+  (interactive)
+  (insert "[]")
+  (backward-char))
+
+(defun insert-matching-quotations ()
+  "Insert a matching parenthesis in programming modes and move the cursor back by one character."
+  (interactive)
+  (insert "''")
+  (backward-char))
+
+(defun insert-matching-doublequotations ()
+  "Insert a matching parenthesis in programming modes and move the cursor back by one character."
+  (interactive)
+  (insert "\"\"")
+  (backward-char))
+
+(defun insert-matching-curlybrackets ()
+  "Insert a matching parenthesis in programming modes and move the cursor back by one character."
+  (interactive)
+  (insert "{}")
+  (backward-char))
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (local-set-key (kbd "(") 'insert-matching-parenthesis)
+	    (local-set-key (kbd "[") 'insert-matching-brackets)
+	    (local-set-key (kbd "'") 'insert-matching-quotations)
+	    (local-set-key (kbd "\"") 'insert-matching-doublequotations)
+	    (local-set-key (kbd "{") 'insert-matching-curlybrackets)))
+
 
 (global-set-key (kbd "C-M-c s") 'add-surrounding-char)
 
