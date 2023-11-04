@@ -49,7 +49,6 @@
 (setq delete-by-moving-to-trash t
       create-lockfiles nil)
 
-
 ; recenter cursor on scroll
 ;; (setq scroll-preserve-screen-position t)
 (defun my-scroll-up ()
@@ -69,6 +68,9 @@
 
 ;; backup files
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
+;; kill whole lines
+(setq kill-whole-line t)
 
 ; windows settings ---------------------------------------------------
 ; enable CUA mode so hotkeys act like windows
@@ -96,6 +98,7 @@
 (global-set-key (kbd "C-M-S-d") 'dired-jump)
 (global-set-key (kbd "C-s")   'save-buffer)
 (global-set-key (kbd "C-a")   'mark-whole-buffer)
+(global-set-key (kbd "C-M-c <home>")   'back-to-indentation)
 
 ;; Macro keybindings
 (global-set-key (kbd "C-M-S-v")   'kmacro-start-macro)
@@ -204,11 +207,11 @@
            ("C-f"         . consult-line)             ;; line searching
            ("M-s L"       . consult-line-multi)       ;; apparently allows selection of multiple lines?
 	   ("C-M-c C-x"   . consult-lsp-diagnostics)  ;; diagnostics consult menu
-           ("M-s u"       . consult-focus-lines)      ;; hides all lines except lines that fit a search
-           ;; ("M-s M-g"     . consult-ripgrep)       ;; ripgrep - will need windows alternative
-           ("C-x C-SPC"   . consult-global-mark)      ;; shows the global-mark-ring, will need to figure out
-           ("C-x M-:"     . consult-complex-command)  ;; consult's version of C-x?
-           ("C-c n"       . consult-org-agenda)       ;; consult's org agenda view
+           ("C-M-c r"     . consult-ripgrep)          ;; ripgrep - will need windows alternative
+	   ("C-M-c f"     . consult-find)             ;; find files
+           ;; ("C-x C-SPC"   . consult-global-mark)      ;; shows the global-mark-ring, will need to figure out
+           ;; ("C-x M-:"     . consult-complex-command)  ;; consult's version of C-x?
+           ;; ("C-c n"       . consult-org-agenda)       ;; consult's org agenda view
            :map dired-mode-map
            ("O" . consult-file-externally)
            :map help-map

@@ -1,0 +1,6 @@
+* For automating installs in future
+
+** stuff to keep in mind
+- timeshift - requires cron job and enabling cronie.service
+- need to manually install emacs application framework for sway (requires jq package)
+  
