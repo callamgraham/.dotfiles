@@ -580,13 +580,11 @@
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)
- (use-package vterm))
+  (use-package vterm
+    :bind (:map vterm-mode-map ("C-v" . vterm-yank))
+    ))
 
 ;; Dired Options ------------------------------------------------------------------------------------
-(use-package dired
-  :commands (dired dired-jump)
-  :custom ((dired-listing-switches "-agho --group-directories-first")))
-
 (require 'dired-x)
 
 (setq dired-omit-files
@@ -608,10 +606,14 @@
   (dired-single-up-directory)
   (recenter))
 
+; default to hide files
+;; (setq dired-omit-mode 1)
+(setq dired-omit-mode 1)
+
 (add-hook 'dired-mode-hook
           (lambda ()
-	    (dired-omit-mode 1)
 	    (dired-hide-details-mode 1)
+	    (setq dired-omit-mode 1)
             (local-set-key (kbd ".") 'dired-omit-mode)
             (local-set-key (kbd "<left>") 'my-dired-up-directory)
             (local-set-key (kbd "<right>") 'dired-find-file)))
