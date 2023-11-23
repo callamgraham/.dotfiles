@@ -616,7 +616,7 @@
 	    (setq dired-omit-mode 1)
             (local-set-key (kbd ".") 'dired-omit-mode)
             (local-set-key (kbd "<left>") 'my-dired-up-directory)
-            (local-set-key (kbd "<right>") 'dired-find-file)))
+            (local-set-key (kbd "<right>") 'dired-open-file)))
 
 (setq dired-kill-when-opening-new-dired-buffer t) ; opening dired will kill existing dired buffers
 
@@ -626,6 +626,16 @@
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package dired-open
+  :commands (dired dired-jump)
+  :config
+  ;; Doesn't work as expected!
+  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+  (setq dired-open-extensions '(("png" . "feh")
+                                ("mkv" . "mpv")
+				("mp4" . "mpv"))))
+
 
 ;; (use-package dired-hide-dotfiles)
 

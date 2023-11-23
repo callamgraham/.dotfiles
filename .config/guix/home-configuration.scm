@@ -39,10 +39,9 @@
   (append (gather-manifest-packages '(emacs))
   (specifications->packages (list
 				      ;; gaming
-				      "steam"
+				      ;; "steam"
 				      ;; "dolphin-emu"
 				      "xrandr" ; for the primary_monitor script
-				      "sdl" ; for running some games like cs:go in wayland
 				      
 				      ;; sys admin
                                       "parted"
@@ -53,7 +52,7 @@
 				      "dunst"
 				      "flatpak"
 				      ;; "nix"
-				      "ntfs-3g" ; for ntfs drives
+				      ;; "ntfs-3g" ; for ntfs drives
 				      "zip"
 				      "unzip"
 				      "xdg-user-dirs"
@@ -62,7 +61,7 @@
 				      "pantalaimon" ; for ement encrypted
 				      
 				      ;; browser
-				      "firefox"
+				      "firefox" ; might want to move this to a container?
 
 				      ;; office
 				      "libreoffice"
@@ -79,7 +78,8 @@
 				      "qpwgraph"
 				      "pavucontrol"
 				      "handbrake"
-				      "mpv" ;
+				      "transmission:gui"
+				      "mpv"
 				      "feh"
 				      
 				      ;; programming
@@ -102,6 +102,13 @@
                    (bashrc (list (local-file
                                   "/home/callam/.dotfiles/.config/guix/.bashrc"
                                   "bashrc")))))
-
+	 ;; setup ssh
 	 (service home-ssh-agent-service-type)
+
+	 ;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
+	 (service home-xdg-configuration-files-service-type
+		  `(("sway/config" ,(local-file "/home/callam/.dotfiles/.config/sway/config"))
+		    ("helix/config" ,(local-file "/home/callam/.dotfiles/.config/helix/config.toml"))
+		    ))
+	 
 	 )))
