@@ -61,7 +61,7 @@
 				      "pantalaimon" ; for ement encrypted
 				      
 				      ;; browser
-				      "firefox" ; might want to move this to a container?
+				      "firefox-wayland" ; might want to move this to a container?
 
 				      ;; office
 				      "libreoffice"
@@ -73,6 +73,7 @@
 				      "font-awesome"
 				      "font-jetbrains-mono"
 				      "breeze-icons"
+				      "font-microsoft-web-core-fonts"
 
 				      ;; media
 				      "qpwgraph"
@@ -99,16 +100,29 @@
                   (home-bash-configuration
                    (aliases '(("grep" . "grep --color=auto") ("ll" . "ls -l")
                               ("ls" . "ls -p --color=auto")))
-                   (bashrc (list (local-file
-                                  "/home/callam/.dotfiles/.config/guix/.bashrc"
-                                  "bashrc")))))
+                   ))
 	 ;; setup ssh
 	 (service home-ssh-agent-service-type)
 
 	 ;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
 	 (service home-xdg-configuration-files-service-type
-		  `(("sway/config" ,(local-file "/home/callam/.dotfiles/.config/sway/config"))
+		  
+		  `(
+		    ;; sway
+		    ("sway/config" ,(local-file "/home/callam/.dotfiles/.config/sway/config"))
+		    ;; helix
 		    ("helix/config" ,(local-file "/home/callam/.dotfiles/.config/helix/config.toml"))
+		    ;; guix channels
+		    ("guix/channels.scm" ,(local-file "/home/callam/.dotfiles/.config/guix/channels.scm"))
+		    ;; waybar
+		    ("waybar/config" ,(local-file "/home/callam/.dotfiles/.config/waybar/config"))
+		    ("waybar/config" ,(local-file "/home/callam/.dotfiles/.config/waybar/style.css"))
+		    ;; wofi
+		    ("wofi/config" ,(local-file "/home/callam/.dotfiles/.config/wofi/config"))
+		    ("wofi/config" ,(local-file "/home/callam/.dotfiles/.config/wofi/style.css"))
+		    ;; xdg
+		    ("user-dirs.dirs" ,(local-file "/home/callam/.dotfiles/.config/user-dirs.dirs"))
+		    ("user-dirs.locale" ,(local-file "/home/callam/.dotfiles/.config/user-dirs.locale"))
 		    ))
 	 
 	 )))
