@@ -634,6 +634,7 @@
   ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
   (setq dired-open-extensions '(("png" . "feh")
                                 ("mkv" . "mpv")
+				("MOV" . "mpv")
 				("mp4" . "mpv"))))
 
 
