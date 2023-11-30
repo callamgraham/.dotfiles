@@ -29,8 +29,10 @@
              (gnu packages)
              (gnu services)
              (guix gexp)
+	     (guix channels)
 	     (gnu home services)
              (gnu home services shells)
+	     (gnu home services guix)
 	     (gnu home services ssh))
 
 (home-environment
@@ -96,12 +98,12 @@
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
-  (services
-   (list (service home-bash-service-type
-                  (home-bash-configuration
-                   (aliases '(("grep" . "grep --color=auto") ("ll" . "ls -l")
-                              ("ls" . "ls -p --color=auto")))
-                   ))
+(services
+  (list (service home-bash-service-type
+                 (home-bash-configuration
+                  (aliases '(("grep" . "grep --color=auto") ("ll" . "ls -l")
+                             ("ls" . "ls -p --color=auto")))
+                  ))
 	 ;; setup ssh
 	 (service home-ssh-agent-service-type)
 
@@ -146,11 +148,13 @@
 		    ("user-dirs.locale" ,(local-file "/home/callam/.dotfiles/.config/user-dirs.locale"))
 		    ))
 
-	 (service home-xdg-configuration-files-service-type
+	 (service home-files-service-type
 		  
 		  `(
 		    (".tmux.conf" ,(local-file "/home/callam/.dotfiles/.tmux.conf"))
 		    (".gitconfig" ,(local-file "/home/callam/.dotfiles/.gitconfig"))))
 	 
 	 
-	 )))
+	 ))
+ 
+ )
