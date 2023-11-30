@@ -48,7 +48,7 @@ set $menu  wofi --show drun -I | xargs swaymsg exec --
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /home/callam/.wallpaper/banff.jpg fill
+output * bg /home/callam/.dotfiles/.wallpaper/banff.jpg fill
 #
 # Example configuration:
 #

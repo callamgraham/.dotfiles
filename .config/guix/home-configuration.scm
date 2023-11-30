@@ -29,6 +29,7 @@
              (gnu packages)
              (gnu services)
              (guix gexp)
+	     (gnu home services)
              (gnu home services shells)
 	     (gnu home services ssh))
 
@@ -40,7 +41,7 @@
   (specifications->packages (list
 				      ;; gaming
 				      ;; "steam"
-				      ;; "dolphin-emu"
+				      "dolphin-emu"
 				      "xrandr" ; for the primary_monitor script
 				      
 				      ;; sys admin
@@ -104,25 +105,52 @@
 	 ;; setup ssh
 	 (service home-ssh-agent-service-type)
 
+	 (simple-service 'variant-packages-service
+                home-channels-service-type
+                (list
+                 (channel
+		  (name 'nonguix)
+		  (url "https://gitlab.com/nonguix/nonguix")
+		  (introduction
+		   (make-channel-introduction
+		    "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+		    (openpgp-fingerprint
+		     "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))))
+
+	 (simple-service 'some-useful-env-vars-service
+		home-environment-variables-service-type
+		`(("GUIX_SANDBOX_HOME" . "/extra/nvme1/sandbox")
+		  ("EDITOR" . "emacsclient")
+		  ("XDG_CURRENT_DESKTOP" . "sway")))
+	 
 	 ;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
 	 (service home-xdg-configuration-files-service-type
 		  
 		  `(
 		    ;; sway
 		    ("sway/config" ,(local-file "/home/callam/.dotfiles/.config/sway/config"))
+
 		    ;; helix
-		    ("helix/config" ,(local-file "/home/callam/.dotfiles/.config/helix/config.toml"))
-		    ;; guix channels
-		    ("guix/channels.scm" ,(local-file "/home/callam/.dotfiles/.config/guix/channels.scm"))
+		    ("helix/config.toml" ,(local-file "/home/callam/.dotfiles/.config/helix/config.toml"))
+
 		    ;; waybar
 		    ("waybar/config" ,(local-file "/home/callam/.dotfiles/.config/waybar/config"))
-		    ("waybar/config" ,(local-file "/home/callam/.dotfiles/.config/waybar/style.css"))
+		    ("waybar/style.css" ,(local-file "/home/callam/.dotfiles/.config/waybar/style.css"))
+		    
 		    ;; wofi
 		    ("wofi/config" ,(local-file "/home/callam/.dotfiles/.config/wofi/config"))
-		    ("wofi/config" ,(local-file "/home/callam/.dotfiles/.config/wofi/style.css"))
+		    ("wofi/style.css" ,(local-file "/home/callam/.dotfiles/.config/wofi/style.css"))
+
 		    ;; xdg
 		    ("user-dirs.dirs" ,(local-file "/home/callam/.dotfiles/.config/user-dirs.dirs"))
 		    ("user-dirs.locale" ,(local-file "/home/callam/.dotfiles/.config/user-dirs.locale"))
 		    ))
+
+	 (service home-xdg-configuration-files-service-type
+		  
+		  `(
+		    (".tmux.conf" ,(local-file "/home/callam/.dotfiles/.tmux.conf"))
+		    (".gitconfig" ,(local-file "/home/callam/.dotfiles/.gitconfig"))))
+	 
 	 
 	 )))

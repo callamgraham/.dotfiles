@@ -79,7 +79,6 @@
 		      mesa
 		      pipewire
 		      wireplumber
-		      nix
 		      alacritty)
                     %base-packages))
 
@@ -97,13 +96,18 @@
 
   (services (append (list
 			  ;; configure env variables
-			  (simple-service 'my-custom-env-vars-service
-					  home-environment-variables-service-type
-					  `(("GUIX_SANDBOX_HOME" . "/extra/nvme1/sandbox")
-					    ("EDITOR" . "emacsclient")
-					    ("XDG_CURRENT_DESKTOP" . "sway")))
-			  (service nix-service-type)
-			  (service sddm-service-type))
+			  (service sddm-service-type)
+			  (simple-service 'variant-packages-service
+					  home-channels-service-type
+					  (list
+					   (channel
+					    (name 'nonguix)
+					    (url "https://gitlab.com/nonguix/nonguix")
+					    (introduction
+					     (make-channel-introduction
+					      "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+					      (openpgp-fingerprint
+					       "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5")))))))
 		    %my-desktop-services))
   
   (bootloader (bootloader-configuration
@@ -111,22 +115,18 @@
                 (targets (list "/boot/efi"))
                 (keyboard-layout keyboard-layout)))
   (swap-devices (list (swap-space
-                        (target (uuid
-                                 "33c8856e-9d42-47b1-b75f-29277c7aab2e")))))
+                        (target "/dev/nvme1n1p2"))))
 
   ;; The list of file systems that get "mounted".  The unique
   ;; file system identifiers there ("UUIDs") can be obtained
   ;; by running 'blkid' in a terminal.
   (file-systems (cons* (file-system
                          (mount-point "/")
-                         (device (uuid
-                                  "7d0373cc-c552-41c0-acae-90f2ad8cc655"
-                                  'ext4))
+                         (device "/dev/nvme1n1p3")
                          (type "ext4"))
                        (file-system
                          (mount-point "/boot/efi")
-                         (device (uuid "B457-AEE1"
-                                       'fat32))
+                         (device "/dev/nvme1n1p1")
                          (type "vfat")) 
 
 		       ;; TODO need to add mount option to give user rw permissions, something tike (option "umask=0022,uid=1000")
