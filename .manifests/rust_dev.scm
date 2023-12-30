@@ -3,6 +3,7 @@
    "bash"
    "clang"
    "openssh"
+   "gnupg"
    "coreutils"
    "curl"
    "grep"
