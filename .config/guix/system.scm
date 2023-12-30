@@ -12,6 +12,8 @@
 (use-modules 
   (gnu)
   (gnu home services)
+  (guix channels)
+  (gnu home services guix)
   (gnu packages linux)
   (nongnu packages linux)
   (nongnu system linux-initrd)
@@ -40,22 +42,25 @@
 			      %default-authorized-guix-keys))))
 
 		   (delete gdm-service-type)
-		   ;; (gdm-service-type config =>
-				     ;; (gdm-configuration
-				      ;; (inherit config)
-				      ;; (wayland? #t)))
-
 		   ))
+
+(define etc-sudoers-config
+  (plain-file "etc-sudoers-config"
+              "Defaults  timestamp_timeout=480
+root      ALL=(ALL) ALL
+%wheel    ALL=(ALL) ALL
+callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home/callam/.guix-home/profile/sbin/reboot"))
 
 
 (operating-system
-  (kernel linux)
-  (initrd microcode-initrd)
-  (firmware (list linux-firmware))
-  (locale "en_CA.utf8")
-  (timezone "America/Toronto")
-  (keyboard-layout (keyboard-layout "us"))
-  (host-name "Desktop")
+ (kernel linux)
+ (sudoers-file etc-sudoers-config)
+ (initrd microcode-initrd)
+ (firmware (list linux-firmware))
+ (locale "en_CA.utf8")
+ (timezone "America/Toronto")
+ (keyboard-layout (keyboard-layout "us"))
+ (host-name "Desktop")
 
   ;; The list of user accounts ('root' is implicit).
   (users (cons* (user-account
@@ -84,30 +89,21 @@
 
   ;; Below is the list of system services.  To search for available
   ;; services, run 'guix system search KEYWORD' in a terminal.
-  ;; TODO remove original below
-  ;(services
-  ; (append (list (service network-manager-service-type)
-  ;               (service wpa-supplicant-service-type)
-  ;               (service ntp-service-type))
-;
-;           ;; This is the default list of services we
-;           ;; are appending to.
-;           %base-services))
 
   (services (append (list
 			  ;; configure env variables
-			  (service sddm-service-type)
-			  (simple-service 'variant-packages-service
-					  home-channels-service-type
-					  (list
-					   (channel
-					    (name 'nonguix)
-					    (url "https://gitlab.com/nonguix/nonguix")
-					    (introduction
-					     (make-channel-introduction
-					      "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-					      (openpgp-fingerprint
-					       "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5")))))))
+		     (service sddm-service-type)
+		     (simple-service 'variant-packages-service
+				     home-channels-service-type
+				     (list
+				      (channel
+				       (name 'nonguix)
+				       (url "https://gitlab.com/nonguix/nonguix")
+				       (introduction
+					(make-channel-introduction
+					 "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+					 (openpgp-fingerprint
+					  "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5")))))))
 		    %my-desktop-services))
   
   (bootloader (bootloader-configuration
