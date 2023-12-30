@@ -1,5 +1,10 @@
 [user]
 	email = callamigraham@gmail.com
 	name = Callam Graham
+	signingkey = 173B393DE95ED1AE
+[commit]
+	gpgsign = true
 [github]
 	user = callamgraham
+
+
