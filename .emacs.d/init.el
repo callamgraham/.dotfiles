@@ -25,6 +25,10 @@
 
 (setq visible-bell t); Set up the visible bell
 
+;; Transparency
+(set-frame-parameter nil 'alpha-background 70)
+(add-to-list 'default-frame-alist '(alpha-background . 70))
+
 ;; ;; Enable line numbers in all buffers
 ;; (global-linum-mode t)
 
@@ -77,6 +81,10 @@
 (cua-mode t)
 (delete-selection-mode 1)
 
+;; use pinentry on linux
+(when (eq system-type 'gnu/linux)
+  (setq epa-pinentry-mode 'loopback)
+  (pinentry-start))
 
 ; use line for the cursor
 (setq-default cursor-type 'bar)
@@ -203,7 +211,7 @@
 ;; make sure the use-package package is installed
 (if (eq system-type 'gnu/linux)
     ;; using Guix for linux
-    (setq use-package-always-ensure t) ; switching to arch
+    (setq use-package-always-ensure nil) ; switching to arch
   
   (setq use-package-always-ensure t)
   )
@@ -421,10 +429,10 @@
 
 ;; which key - shows key commands
 (use-package which-key
-  :defer 0
-  :diminish which-key-mode
+  ;; :defer 0
+  ;; :diminish which-key-mode
   :config
-  (which-key-mode)
+  ;; (which-key-mode)
   (setq which-key-idle-delay 0.3))
 
 ;;
@@ -460,7 +468,6 @@
 (when (eq system-type 'gnu/linux)
 (use-package tree-sitter-langs)
 (use-package tree-sitter
-  :ensure t
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
@@ -551,24 +558,25 @@
         (avy-goto-line . ,(number-sequence ?1 ?9))))
 
 ;; Eshell ------------------------------------------------------------------------------------
-(defun efs/configure-eshell ()
+
+(defun cig/configure-eshell ()
   ;; Save command history when commands are entered
   (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
 
   ;; Truncate buffer for performance
   (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
 
-  (setq eshell-history-size         10000
+(setq   eshell-prompt-regexp        "^λ "
+        eshell-history-size         10000
         eshell-buffer-maximum-lines 10000
         eshell-hist-ignoredups t
-        eshell-scroll-to-bottom-on-input t))
+        eshell-highlight-prompt t
+        eshell-scroll-to-bottom-on-input t
+        eshell-prefer-lisp-functions nil))
 
-(use-package eshell-git-prompt
-  :ensure t ; no guix?
-  :after eshell)
 
 (use-package eshell
-  :hook (eshell-first-time-mode . efs/configure-eshell)
+  :hook (eshell-first-time-mode . cig/configure-eshell)
   :bind ("<f7>" . eshell)
   :config
 
@@ -576,7 +584,8 @@
     (setq eshell-destroy-buffer-when-process-dies t)
     (setq eshell-visual-commands '("htop" "zsh" "vim"))) ; these commands get run in an external terminal
 
-  (eshell-git-prompt-use-theme 'powerline))
+  ;; (eshell-git-prompt-use-theme 'powerline)
+  )
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)
@@ -615,6 +624,7 @@
 	    (dired-hide-details-mode 1)
 	    (setq dired-omit-mode 1)
             (local-set-key (kbd ".") 'dired-omit-mode)
+	    (local-set-key (kbd "<home>") '(find-alternate-file "~/"))
             (local-set-key (kbd "<left>") 'my-dired-up-directory)
             (local-set-key (kbd "<right>") 'dired-open-file)))
 
@@ -624,8 +634,8 @@
   :ensure t ;; no guix
   :commands (dired dired-jump))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+;; (use-package all-the-icons-dired
+  ;; :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-open
   :commands (dired dired-jump)
@@ -661,8 +671,8 @@
 (use-package ement)
 
 ;; Guix ------------------------------------------------------------------------------------
-;; (use-package geiser-guile)
-;; (use-package guix)
+(use-package geiser-guile)
+(use-package guix)
 
 
 ;; Element Chat -----------------------------------------------------------------------------------
