@@ -8,6 +8,7 @@
    "emacs-corfu"
    "emacs-cape"
    "emacs-consult"
+   "emacs-denote"
    "emacs-doom-themes"
    "emacs-dired-hacks"
    "emacs-ement"
