@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-sudo -E guix system reconfigure /home/callam/.dotfiles/.config/guix/system.scm
