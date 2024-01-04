@@ -66,6 +66,7 @@
 				      "pantalaimon" ; for ement encrypted
 				      "ripgrep"
 				      "rsync"
+				      "htop"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
@@ -115,6 +116,7 @@
 			     ("rust" . "cd ~
 guix shell --network --container --emulate-fhs \
      -m /home/callam/.dotfiles/.manifests/rust_dev.scm \
+     -m /home/callam/.dotfiles/.manifests/prog.scm \
      -m /home/callam/.dotfiles/.manifests/emacs.scm \
      --preserve='^DISPLAY$' \
      --share=$HOME/Projects/Rust=$HOME \
@@ -123,7 +125,23 @@ guix shell --network --container --emulate-fhs \
      --expose=$HOME/.gnupg=$HOME/.gnupg \
      --expose=$HOME/.gitconfig=$HOME/.gitconfig \
      --expose=$HOME/.dotfiles/.bin/rust-shell-init=$HOME/.bin/rust-shell-init \
+     --expose=$HOME/.dotfiles/.config/guix/rust-profile=$HOME/.profile \
      -- ~/.bin/rust-shell-init 
+")
+			     ("pydev" . "cd ~
+guix shell --network --container --emulate-fhs \
+     -m /home/callam/.dotfiles/.manifests/python_dev.scm \
+     -m /home/callam/.dotfiles/.manifests/emacs.scm \
+     -m /home/callam/.dotfiles/.manifests/prog.scm \
+     --preserve='^DISPLAY$' \
+     --share=$HOME/Projects/Python=$HOME \
+     --expose=$HOME/.emacs.d/init.el=$HOME/.emacs.d/init.el \
+     --expose=$HOME/.ssh=$HOME/.ssh \
+     --expose=$HOME/.gnupg=$HOME/.gnupg \
+     --expose=$HOME/.gitconfig=$HOME/.gitconfig \
+     --expose=$HOME/.dotfiles/.bin/python-shell-init=$HOME/.bin/python-shell-init \
+     --expose=$HOME/.dotfiles/.config/guix/python-profile=$HOME/.profile \
+     -- ~/.bin/python-shell-init 
 ")
 			     ))
                   ))

@@ -668,7 +668,7 @@
   :config
   ;; Remember to check the doc strings of those variables.
   (setq denote-directory (expand-file-name "~/Documents/Notes/"))
-  (setq denote-known-keywords '("Journal" "emacs" "guix"))
+  (setq denote-known-keywords '("journal" "emacs" "guix"))
   (setq denote-infer-keywords t)
   (setq denote-sort-keywords t)
   (setq denote-file-type nil) ; Org is the default, set others here

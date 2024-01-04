@@ -19,7 +19,7 @@
   (nongnu system linux-initrd)
   )
 (use-package-modules terminals certs wm xdisorg vim gl package-management)
-(use-service-modules cups desktop networking ssh xorg nix sddm)
+(use-service-modules cups desktop networking ssh xorg nix sddm docker)
 
 ;; Modify configurations of default %desktop-services
 (define %my-desktop-services
@@ -69,7 +69,7 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
                   (group "users")
 		  (uid 1000)
                   (home-directory "/home/callam")
-                  (supplementary-groups '("wheel" "netdev" "audio" "video")))
+                  (supplementary-groups '("wheel" "netdev" "audio" "video" "docker")))
                 %base-user-accounts))
 
   ;; Packages installed system-wide.  Users can also install packages
@@ -93,6 +93,7 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   (services (append (list
 			  ;; configure env variables
 		     (service sddm-service-type)
+		     (service docker-service-type)
 		     (simple-service 'variant-packages-service
 				     home-channels-service-type
 				     (list

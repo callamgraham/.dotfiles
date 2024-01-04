@@ -12,8 +12,4 @@
    "xf86-video-amdgpu"
    "amdgpu-firmware"
    "mesa-opencl"
-   
-   ;; fonts/icons
-   "font-adobe-source-code-pro"
-   "font-awesome"
    ))
