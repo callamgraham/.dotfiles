@@ -1,6 +1,6 @@
 (specifications->manifest
  '(
-   "emacs-pgtk"
+   "emacs"
    "emacs-async"
    "emacs-avy"
    "emacs-beacon"
