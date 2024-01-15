@@ -16,4 +16,10 @@
    ;; fonts/icons
    "font-adobe-source-code-pro"
    "font-awesome"
+
+   ;; for cross compiling
+   "gcc-cross-x86_64-w64-mingw32-toolchain"
+   "docker"
+   "docker-cli"
+   "rust-gcc" ;;?? not sure if I need this?
    ))
