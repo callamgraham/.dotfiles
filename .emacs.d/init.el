@@ -26,8 +26,8 @@
 (setq visible-bell t); Set up the visible bell
 
 ;; Transparency
-(set-frame-parameter nil 'alpha-background 70)
-(add-to-list 'default-frame-alist '(alpha-background . 70))
+;; (set-frame-parameter nil 'alpha-background 70)
+;; (add-to-list 'default-frame-alist '(alpha-background . 70))
 
 ;; ;; Enable line numbers in all buffers
 ;; (global-linum-mode t)
@@ -478,26 +478,14 @@
   :init (global-flycheck-mode))
 
 
-; unfortunately will be using different LSPs for the different OS's --------------
-(when (eq system-type 'windows-nt) ; eglot for windows
-  (global-set-key (kbd "C-M-c C-z") 'xref-find-definitions)
-    (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point))
+; lsp keybindings
+(global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
+(global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point)
 
-(when (eq system-type 'gnu/linux) ; lsp-mode for linux
-  (global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
-    (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point))
-
-(when (eq system-type 'windows-nt) ; eglot for windows
-  (use-package eglot
-    :config
-    (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
-    :hook
-    (python-mode . eglot-ensure)
-  ))
-
-(when (eq system-type 'gnu/linux) ; lsp-mode for linux
-  (use-package lsp-mode
+(use-package lsp-mode
   :commands lsp
+  :hook
+  ((python-mode . lsp))
   :custom
   ;; what to use when checking on-save. "check" is default, I prefer clippy
   (lsp-rust-analyzer-cargo-watch-command "clippy")
@@ -511,8 +499,8 @@
   (lsp-rust-analyzer-display-closure-return-type-hints t)
   (lsp-rust-analyzer-display-parameter-hints nil)
   (lsp-rust-analyzer-display-reborrow-hints nil)
-  :config
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+    :config
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
@@ -520,7 +508,6 @@
   (lsp-ui-peek-always-show t)
   (lsp-ui-sideline-show-hover t)
   (lsp-ui-doc-enable nil))
-  )
 
 ;; python stuff
 ;; (add-hook 'python-mode-hook
@@ -528,10 +515,8 @@
 ;;             (local-set-key (kbd "TAB") 'python-indent-right)
 ;;             (local-set-key (kbd "M-TAB") 'dired-find-file)))
 
-;; Rust - only for linux
-(when (eq system-type 'gnu/linux)
-  (use-package rustic)
-  )
+;; Rust
+(use-package rustic)
 
 ;; can't seem to get this to work with use-package so putting it here
 (add-hook 'rustic-mode-hook
@@ -554,8 +539,8 @@
   )
 
 (setq avy-keys-alist
-      `((avy-goto-char . (?a ?s ?e ?t ?i ?r ?c ?m ?n ?o ?u))
-        (avy-goto-line . ,(number-sequence ?1 ?9))))
+      `((avy-goto-char . (number-sequence ?1 ?9))
+        (avy-goto-line . (number-sequence ?1 ?9))))
 
 ;; Eshell ------------------------------------------------------------------------------------
 
@@ -668,7 +653,7 @@
   :config
   ;; Remember to check the doc strings of those variables.
   (setq denote-directory (expand-file-name "~/Documents/Notes/"))
-  (setq denote-known-keywords '("journal" "emacs" "guix"))
+  (setq denote-known-keywords '("journal"))
   (setq denote-infer-keywords t)
   (setq denote-sort-keywords t)
   (setq denote-file-type nil) ; Org is the default, set others here
@@ -766,13 +751,14 @@
 
 
 ;; chat stuff -----------------------------------------------------------------------------------
-
+(when (eq system-type 'gnu/linux)
 ;; matrix client
-(use-package ement)
+  (use-package ement))
 
 ;; Guix ------------------------------------------------------------------------------------
+(when (eq system-type 'gnu/linux)
 (use-package geiser-guile)
-(use-package guix)
+(use-package guix))
 
 
 ;; Element Chat -----------------------------------------------------------------------------------
