@@ -1,1 +1,2 @@
-export PATH="/home/callam/Python-3.12.1:/home/callam/.local/bin/:$PATH"
+export PATH="/home/callam/.local/bin/:$PATH"
+export LD_LIBRARY_PATH=/lib #needed by pylsp

@@ -131,8 +131,8 @@ guix shell --network --container --emulate-fhs \
 			     ("pydev" . "cd ~
 guix shell --network --container --emulate-fhs \
      -m /home/callam/.dotfiles/.manifests/python_dev.scm \
-     -m /home/callam/.dotfiles/.manifests/emacs.scm \
      -m /home/callam/.dotfiles/.manifests/prog.scm \
+     -m /home/callam/.dotfiles/.manifests/emacs.scm \
      --preserve='^DISPLAY$' \
      --share=$HOME/Projects/Python=$HOME \
      --expose=$HOME/.emacs.d/init.el=$HOME/.emacs.d/init.el \

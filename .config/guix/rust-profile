@@ -1,1 +1,2 @@
 . "$HOME/.cargo/env"
+export LD_LIBRARY_PATH=/lib #needed by pylsp
