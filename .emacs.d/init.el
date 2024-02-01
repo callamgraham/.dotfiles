@@ -435,19 +435,17 @@
   (which-key-mode)
   (setq which-key-idle-delay 0.3))
 
-;;
-;; ;; hydra -- used to create quick functions assigned to keybindings this may be worth further exploration?
-;; (use-package hydra)
 
-;; ;; here's an example of a hydra that zooms in and out. ie. scales text
-;; (defhydra hydra-text-scale (:timeout 4) ; this is the function with a timeout of 4 seconds (which is optional)
-;;   "scale text"
-;;   ("j" text-scale-increase "in")
-;;   ("k" text-scale-decrease "out")
-;;   ("f" nil "finished" :exit t))
-;; ;; it is now bound to the leader key plus "ts" for text scale
-;; (cig/leader-keys
-;;   "ts" '(hydra-text-scale/body :which-key "scale text"))
+;; hydra -- used to create quick functions assigned to keybindings this may be worth further exploration?
+(use-package hydra)
+
+;;** Example 3: jump to error
+(defhydra hydra-dir (global-map "C-M-c d")
+  "Directory quick jump"
+  (when (eq system-type 'gnu/linux)
+    ("p" (dired "~/Projects/") "Projects")
+    ("q" nil "quit"))
+  )
 
 ;;Beacon - light up the cursor line on switches
 (use-package beacon
@@ -539,37 +537,17 @@
   )
 
 (setq avy-keys-alist
-      `((avy-goto-char . (number-sequence ?1 ?9))
-        (avy-goto-line . (number-sequence ?1 ?9))))
+      `((avy-goto-char . ,(number-sequence ?1 ?9))
+        (avy-goto-line . ,(number-sequence ?1 ?9))))
 
 ;; Eshell ------------------------------------------------------------------------------------
-
-(defun cig/configure-eshell ()
-  ;; Save command history when commands are entered
-  (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
-
-  ;; Truncate buffer for performance
-  (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
-
-(setq   eshell-prompt-regexp        "^λ "
-        eshell-history-size         10000
-        eshell-buffer-maximum-lines 10000
-        eshell-hist-ignoredups t
-        eshell-highlight-prompt t
-        eshell-scroll-to-bottom-on-input t
-        eshell-prefer-lisp-functions nil))
-
-
 (use-package eshell
-  :hook (eshell-first-time-mode . cig/configure-eshell)
   :bind ("<f7>" . eshell)
   :config
 
   (with-eval-after-load 'esh-opt
     (setq eshell-destroy-buffer-when-process-dies t)
     (setq eshell-visual-commands '("htop" "zsh" "vim"))) ; these commands get run in an external terminal
-
-  ;; (eshell-git-prompt-use-theme 'powerline)
   )
 
 ;; Vterm
@@ -577,6 +555,15 @@
   (use-package vterm
     :bind (:map vterm-mode-map ("C-v" . vterm-yank))
     ))
+
+;; eat
+(when (eq system-type 'windows-nt)
+  (use-package eat
+    :ensure t
+    :config
+    (eat-eshell-mode)
+    (setq eshell-visual-commands '()))
+  )
 
 ;; Dired Options ------------------------------------------------------------------------------------
 (require 'dired-x)

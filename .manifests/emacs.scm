@@ -16,6 +16,7 @@
    "emacs-flycheck"
    "emacs-geiser-guile"
    "emacs-guix"
+   "emacs-hydra"
    "emacs-tempel"
    "emacs-project"
    "emacs-powerline"
