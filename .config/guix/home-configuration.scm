@@ -67,6 +67,7 @@
 				      "ripgrep"
 				      "rsync"
 				      "htop"
+				      "ntfs-3g"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?

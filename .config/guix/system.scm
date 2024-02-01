@@ -112,31 +112,38 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
                 (targets (list "/boot/efi"))
                 (keyboard-layout keyboard-layout)))
   (swap-devices (list (swap-space
-                        (target "/dev/nvme1n1p2"))))
+                       ;; (target "/dev/nvme1n1p2")
+		       (target (uuid "41132975-fff7-43aa-82a3-0529b96e2267"))
+		       )))
 
   ;; The list of file systems that get "mounted".  The unique
   ;; file system identifiers there ("UUIDs") can be obtained
   ;; by running 'blkid' in a terminal.
   (file-systems (cons* (file-system
                          (mount-point "/")
-                         (device "/dev/nvme1n1p3")
+                         ;; (device "/dev/nvme1n1p3")
+			 (device (uuid "8c93d676-6c54-45f7-9490-5bb174d06d13"))
                          (type "ext4"))
+		       
                        (file-system
                          (mount-point "/boot/efi")
                          (device "/dev/nvme1n1p1")
+			 ;; (device (uuid "6B16-B8C8"))
                          (type "vfat")) 
 
 		       ;; TODO need to add mount option to give user rw permissions, something tike (option "umask=0022,uid=1000")
                        (file-system
                          (mount-point "/extra/ssd1")
-                         (device "/dev/sda1")
+                         ;; (device "/dev/sda1")
+			 (device (uuid "5a7d7e88-c601-48fa-8d44-660cf07d0129"))
                          (type "ext4")
 			 (create-mount-point? #t)
 			 )
 
                        (file-system
                          (mount-point "/extra/nvme1")
-                         (device "/dev/nvme0n1p1")
+                         ;; (device "/dev/nvme0n1p1")
+			 (device (uuid "6ec2c6e9-1c9d-446c-b2b5-562302f7b3c1"))
                          (type "ext4")
 			 (create-mount-point? #t)
 			 )
