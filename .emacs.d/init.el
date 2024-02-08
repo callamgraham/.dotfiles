@@ -124,10 +124,6 @@
 (global-set-key (kbd "C-M-c <left>")   'windmove-left)
 (global-set-key (kbd "C-M-c <right>")   'windmove-right)
 
-;; directory hotkeys
-;; dired "~/Projects/"
-;; (global-set-key (kbd "C-M-c d p") (lambda () (interactive) (dired "~/Projects")))
-
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
   (interactive "cEnter a character: ")
@@ -445,18 +441,19 @@
 
 ;; hydra -- used to create quick functions assigned to keybindings this may be worth further exploration?
 (use-package hydra)
-
-(defhydra hydra-open-projects-dired (:color blue)
-  "Open Projects Dired"
-
-  (when (eq system-type 'gnu/linux)
+(when (eq system-type 'gnu/linux)
+  (defhydra hydra-open-projects-dired (:color blue)
+    "Open Dired in..."
     ("p" (lambda () (interactive) (dired "~/Projects")) "Projects" :exit t)
     ("d" (lambda () (interactive) (dired "~/Documents")) "Documents" :exit t)
     ("n" (lambda () (interactive) (dired "~/Documents/Notes")) "Notes" :exit t)
     ("s" (lambda () (interactive) (dired "/extra/ssd1")) "SSD" :exit t)
     ("n" (lambda () (interactive) (dired "/extra/nvme1")) "NVME" :exit t)
-    ("q" nil "Quit" :exit t))
-  (when (eq system-type 'windows-nt)
+    ("q" nil "Quit" :exit t)))
+
+(when (eq system-type 'windows-nt)
+  (defhydra hydra-open-projects-dired (:color blue)
+    "Open Dired in..."
     ("d" (lambda () (interactive) (dired "H:/65z/Database")) "Database" :exit t)
     ("t" (lambda () (interactive) (dired "H:/65z/Database/Reports/Top_Rates")) "Top Rates" :exit t)
     ("r" (lambda () (interactive) (dired "H:/65z/Database/Reports")) "Reports" :exit t)
@@ -465,7 +462,6 @@
     ("s" (lambda () (interactive) (dired (getenv "USERDIR"))) "s_id folder" :exit t)
     ("b" (lambda () (interactive) (dired "H:/65z/Private Client Admin/MPP Models & Trading/Mutual Fund Bulk Orders")) "Reports" :exit t)
     ("q" nil "Quit" :exit t))
-  
   )
 
 (global-set-key (kbd "C-M-c d") 'hydra-open-projects-dired/body)
