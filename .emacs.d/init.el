@@ -99,7 +99,10 @@
 (global-set-key (kbd "<f6>")  'magit-status)
 (global-set-key (kbd "<f8>")  'kill-buffer)
 (global-set-key (kbd "<f7>")  'eshell)
-(global-set-key (kbd "<f9>")  'vterm)
+(when (eq system-type 'gnu/linux)
+  (global-set-key (kbd "<f9>")  'vterm))
+(when (eq system-type 'windows-nt)
+  (global-set-key (kbd "<f9>")  'eat))
 
 (global-set-key (kbd "TAB")  'indent-according-to-mode)
 (global-set-key (kbd "C-M-b")  'comment-line)
@@ -120,6 +123,10 @@
 (global-set-key (kbd "C-M-c <down>")   'windmove-down)
 (global-set-key (kbd "C-M-c <left>")   'windmove-left)
 (global-set-key (kbd "C-M-c <right>")   'windmove-right)
+
+;; directory hotkeys
+;; dired "~/Projects/"
+;; (global-set-key (kbd "C-M-c d p") (lambda () (interactive) (dired "~/Projects")))
 
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
@@ -439,13 +446,31 @@
 ;; hydra -- used to create quick functions assigned to keybindings this may be worth further exploration?
 (use-package hydra)
 
-;;** Example 3: jump to error
-(defhydra hydra-dir (global-map "C-M-c d")
-  "Directory quick jump"
+(defhydra hydra-open-projects-dired (:color blue)
+  "Open Projects Dired"
+
   (when (eq system-type 'gnu/linux)
-    ("p" (dired "~/Projects/") "Projects")
-    ("q" nil "quit"))
+    ("p" (lambda () (interactive) (dired "~/Projects")) "Projects" :exit t)
+    ("d" (lambda () (interactive) (dired "~/Documents")) "Documents" :exit t)
+    ("n" (lambda () (interactive) (dired "~/Documents/Notes")) "Notes" :exit t)
+    ("s" (lambda () (interactive) (dired "/extra/ssd1")) "SSD" :exit t)
+    ("n" (lambda () (interactive) (dired "/extra/nvme1")) "NVME" :exit t)
+    ("q" nil "Quit" :exit t))
+  (when (eq system-type 'windows-nt)
+    ("d" (lambda () (interactive) (dired "H:/65z/Database")) "Database" :exit t)
+    ("t" (lambda () (interactive) (dired "H:/65z/Database/Reports/Top_Rates")) "Top Rates" :exit t)
+    ("r" (lambda () (interactive) (dired "H:/65z/Database/Reports")) "Reports" :exit t)
+    ("x" (lambda () (interactive) (dired (concat (getenv "USERDIR") "/xltdfm"))) "xltdfm" :exit t)
+    ("i" (lambda () (interactive) (dired (concat (getenv "USERDIR") "/Daily_Imports"))) "Daily Imports" :exit t)
+    ("s" (lambda () (interactive) (dired (getenv "USERDIR"))) "s_id folder" :exit t)
+    ("b" (lambda () (interactive) (dired "H:/65z/Private Client Admin/MPP Models & Trading/Mutual Fund Bulk Orders")) "Reports" :exit t)
+    ("q" nil "Quit" :exit t))
+  
   )
+
+(global-set-key (kbd "C-M-c d") 'hydra-open-projects-dired/body)
+
+
 
 ;;Beacon - light up the cursor line on switches
 (use-package beacon
@@ -640,7 +665,10 @@
   :config
   ;; Remember to check the doc strings of those variables.
   (setq denote-directory (expand-file-name "~/Documents/Notes/"))
-  (setq denote-known-keywords '("journal"))
+  (when (eq system-type 'windows-nt)
+    (setq denote-known-keywords '("PC Meeting" "Condo Meeting" "Investment Committee" "Client Call" "Misc")))
+  (when (eq system-type 'gnu/linux)
+    (setq denote-known-keywords '("journal")))
   (setq denote-infer-keywords t)
   (setq denote-sort-keywords t)
   (setq denote-file-type nil) ; Org is the default, set others here
