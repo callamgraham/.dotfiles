@@ -121,8 +121,11 @@
 (global-set-key (kbd "C-M-c h")   'split-window-horizontally)
 (global-set-key (kbd "C-M-c <up>")   'windmove-up)
 (global-set-key (kbd "C-M-c <down>")   'windmove-down)
-(global-set-key (kbd "C-M-c <left>")   'windmove-left)
+(global-set-key (kbd "C-M-c <left>")   'windmove-left);
 (global-set-key (kbd "C-M-c <right>")   'windmove-right)
+
+;; org agenda
+(global-set-key (kbd "C-M-c a")   'org-agenda)
 
 (defun add-surrounding-char (char)
   ;; "Add the specified character to the start and end of the currently highlighted text."
@@ -657,8 +660,12 @@
 ;; Org stuff ------------------------------------------------------------------------------------
 (use-package org)
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+;; use autolist for automatic indenting in org mode
+(use-package org-autolist 
+  :ensure t
+  :hook (org-mode . org-autolist-mode))
+
+(setq org-agenda-files "~/Documents/Notes/")
 
 (use-package denote
   :config
@@ -771,10 +778,10 @@
 
 ;; Guix ------------------------------------------------------------------------------------
 (when (eq system-type 'gnu/linux)
-(use-package geiser-guile)
-(use-package guix))
+  (use-package geiser-guile)
+  (use-package guix))
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 
-;; Element Chat -----------------------------------------------------------------------------------
-
-;; TODO need to add element, but only load if SHELL_LEVEL is set to zero (if not its in a shell)
