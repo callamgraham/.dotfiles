@@ -13,6 +13,7 @@
    "emacs-dired-hacks"
    "emacs-ement"
    "emacs-expand-region"
+   "emacs-eshell-prompt-extras"
    "emacs-flycheck"
    "emacs-geiser-guile"
    "emacs-guix"

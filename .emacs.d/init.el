@@ -562,14 +562,17 @@
         (avy-goto-line . ,(number-sequence ?1 ?9))))
 
 ;; Eshell ------------------------------------------------------------------------------------
+(use-package eshell-prompt-extras)
+
 (use-package eshell
   :bind ("<f7>" . eshell)
   :config
 
   (with-eval-after-load 'esh-opt
-    (setq eshell-destroy-buffer-when-process-dies t)
-    (setq eshell-visual-commands '("htop" "zsh" "vim"))) ; these commands get run in an external terminal
-  )
+    (autoload 'epe-theme-lambda "eshell-prompt-extras")
+    (setq eshell-visual-commands '("htop" "zsh" "vim")
+	  eshell-highlight-prompt nil
+	  eshell-prompt-function 'epe-theme-lambda)))
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)
