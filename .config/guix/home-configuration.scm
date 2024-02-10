@@ -49,6 +49,8 @@
 				      "dolphin-emu"
 				      "xrandr" ; for the primary_monitor script
 				      "citra" ; from my personal channel
+				      "desmume" ; gba games
+				      "mgba"
 				      
 				      ;; sys admin
                                       "parted"
