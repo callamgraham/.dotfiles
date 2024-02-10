@@ -449,9 +449,11 @@
     "Open Dired in..."
     ("p" (lambda () (interactive) (dired "~/Projects")) "Projects" :exit t)
     ("d" (lambda () (interactive) (dired "~/Documents")) "Documents" :exit t)
+    ("D" (lambda () (interactive) (dired "~/Downloads")) "Downloads" :exit t)
+    ("." (lambda () (interactive) (dired "~/.dotfiles")) "Dotfiles" :exit t)
     ("n" (lambda () (interactive) (dired "~/Documents/Notes")) "Notes" :exit t)
-    ("s" (lambda () (interactive) (dired "/extra/ssd1")) "SSD" :exit t)
-    ("n" (lambda () (interactive) (dired "/extra/nvme1")) "NVME" :exit t)
+    ("S" (lambda () (interactive) (dired "/extra/ssd1")) "SSD" :exit t)
+    ("N" (lambda () (interactive) (dired "/extra/nvme1")) "NVME" :exit t)
     ("q" nil "Quit" :exit t)))
 
 (when (eq system-type 'windows-nt)
@@ -665,7 +667,7 @@
   :ensure t
   :hook (org-mode . org-autolist-mode))
 
-(setq org-agenda-files "~/Documents/Notes/")
+(setq org-agenda-files '("~/Documents/Notes/"))
 
 (use-package denote
   :config
