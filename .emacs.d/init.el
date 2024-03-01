@@ -5,7 +5,11 @@
 ;; setup proxy information for windows
 (when (eq system-type 'windows-nt)
   (setq proxy-file "~/.emacs.d/proxy.el")
-  (load proxy-file))
+  (load proxy-file)
+
+  (setq explicit-shell-file-name (concat (getenv "USERDIR") "\\msys2\\usr\\bin\\bash.exe"))
+  (add-to-list 'exec-path (concat (getenv "USERDIR") "\\msys2\\usr\\bin\\bash.exe"))
+  )
 
 ;;; Code:
 ; Disable the startup message and screen ie.  Emacs welcome
@@ -462,10 +466,12 @@
     ("d" (lambda () (interactive) (dired "H:/65z/Database")) "Database" :exit t)
     ("t" (lambda () (interactive) (dired "H:/65z/Database/Reports/Top_Rates")) "Top Rates" :exit t)
     ("r" (lambda () (interactive) (dired "H:/65z/Database/Reports")) "Reports" :exit t)
+    ("D" (lambda () (interactive) (dired (concat (getenv "USERDIR") "/Downloads"))) "Downloads" :exit t)
     ("x" (lambda () (interactive) (dired (concat (getenv "USERDIR") "/xltdfm"))) "xltdfm" :exit t)
     ("i" (lambda () (interactive) (dired (concat (getenv "USERDIR") "/Daily_Imports"))) "Daily Imports" :exit t)
     ("s" (lambda () (interactive) (dired (getenv "USERDIR"))) "s_id folder" :exit t)
     ("b" (lambda () (interactive) (dired "H:/65z/Private Client Admin/MPP Models & Trading/Mutual Fund Bulk Orders")) "Reports" :exit t)
+    ("n" (lambda () (interactive) (dired "~/Documents/Notes")) "Notes" :exit t)
     ("q" nil "Quit" :exit t))
   )
 
@@ -787,3 +793,7 @@
 (load custom-file)
 
 
+;; ellama - windows only for now until i setup docker?
+(when (eq system-type 'windows-nt)
+  (use-package ellama
+    :ensure t))
