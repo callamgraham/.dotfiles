@@ -76,15 +76,14 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   ;; under their own account: use 'guix search KEYWORD' to search
   ;; for packages and 'guix install PACKAGE' to install a package.
   (packages (append (list 
-		      nss-certs
-		      vim
-		      sway
-		      wofi
-		      waybar
-		      mesa
-		      pipewire
-		      wireplumber
-		      alacritty)
+		     vim
+		     sway
+		     wofi
+		     waybar
+		     mesa
+		     pipewire
+		     wireplumber
+		     alacritty)
                     %base-packages))
 
   ;; Below is the list of system services.  To search for available
@@ -112,8 +111,7 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
                 (targets (list "/boot/efi"))
                 (keyboard-layout keyboard-layout)))
   (swap-devices (list (swap-space
-                       ;; (target "/dev/nvme1n1p2")
-		       (target (uuid "41132975-fff7-43aa-82a3-0529b96e2267"))
+		       (target (uuid "d212b416-ffb8-4720-b865-0b8907390dc9"))
 		       )))
 
   ;; The list of file systems that get "mounted".  The unique
@@ -121,15 +119,16 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   ;; by running 'blkid' in a terminal.
   (file-systems (cons* (file-system
                          (mount-point "/")
-                         ;; (device "/dev/nvme1n1p3")
-			 (device (uuid "8c93d676-6c54-45f7-9490-5bb174d06d13"))
+                         (device (uuid
+                                  "38e7122c-604f-41e7-a48f-95d73a2e3c8b"
+                                  'ext4))
                          (type "ext4"))
 		       
                        (file-system
                          (mount-point "/boot/efi")
-                         (device "/dev/nvme1n1p1")
-			 ;; (device (uuid "6B16-B8C8"))
-                         (type "vfat")) 
+                         (device (uuid "19F4-7892"
+                                       'fat32))
+                         (type "vfat"))
 
 		       ;; TODO need to add mount option to give user rw permissions, something tike (option "umask=0022,uid=1000")
                        (file-system

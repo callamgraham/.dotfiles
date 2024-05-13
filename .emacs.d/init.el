@@ -314,7 +314,11 @@
   (setq enable-recursive-minibuffers t))
 
 ;; give the consult minibuffer a diagnostics picker
-(use-package consult-lsp)
+(when (eq system-type 'gnu/linux)
+  (use-package consult-lsp))
+
+(when (eq system-type 'windows-nt)
+  (use-package consult-eglot))
 
 ;;;; Code Completion
 (use-package corfu
@@ -351,7 +355,7 @@
                               corfu-auto nil) ; Disables auto completion.
               (corfu-mode)))) ; enables corfu mode in eshell
 ; Add extensions
-(when (eq system-type 'windows-nt)
+(when (eq system-type 'gnu/linux)
   (use-package cape
     :defer 10
     :bind ("C-c f" . cape-file)
@@ -497,48 +501,55 @@
 
 ;; Tree Sitter for highlighting and navigation
 (when (eq system-type 'gnu/linux)
-(use-package tree-sitter-langs)
-(use-package tree-sitter
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
+  (use-package tree-sitter-langs)
+  (use-package tree-sitter
+    :config
+    (require 'tree-sitter-langs)
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
 
 ;; flycheck for checking errors
-(use-package flycheck
-  :init (global-flycheck-mode))
-
+(when (eq system-type 'gnu/linux)
+  (use-package flycheck
+    :init (global-flycheck-mode)))  
 
 ; lsp keybindings
-(global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
-(global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point)
+(when (eq system-type 'gnu/linux)
+  (global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
+  (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point)
 
-(use-package lsp-mode
-  :commands lsp
-  :hook
-  ((python-mode . lsp))
-  :custom
-  ;; what to use when checking on-save. "check" is default, I prefer clippy
-  (lsp-rust-analyzer-cargo-watch-command "clippy")
-  (lsp-eldoc-render-all t)
-  (lsp-idle-delay 0.6)
-  ;; enable / disable the hints as you prefer:
-  (lsp-rust-analyzer-server-display-inlay-hints t)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
-  (lsp-rust-analyzer-display-chaining-hints t)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
-  (lsp-rust-analyzer-display-closure-return-type-hints t)
-  (lsp-rust-analyzer-display-parameter-hints nil)
-  (lsp-rust-analyzer-display-reborrow-hints nil)
+  (use-package lsp-mode
+    :commands lsp
+    :hook
+    ((python-mode . lsp))
+    :custom
+    ;; what to use when checking on-save. "check" is default, I prefer clippy
+    (lsp-rust-analyzer-cargo-watch-command "clippy")
+    (lsp-eldoc-render-all t)
+    (lsp-idle-delay 0.6)
+    ;; enable / disable the hints as you prefer:
+    (lsp-rust-analyzer-server-display-inlay-hints t)
+    (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+    (lsp-rust-analyzer-display-chaining-hints t)
+    (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+    (lsp-rust-analyzer-display-closure-return-type-hints t)
+    (lsp-rust-analyzer-display-parameter-hints nil)
+    (lsp-rust-analyzer-display-reborrow-hints nil)
     :config
     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  
+  (use-package lsp-ui
+    :commands lsp-ui-mode
+    :custom
+    (lsp-ui-peek-always-show t)
+    (lsp-ui-sideline-show-hover t)
+    (lsp-ui-doc-enable nil)))
 
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :custom
-  (lsp-ui-peek-always-show t)
-  (lsp-ui-sideline-show-hover t)
-  (lsp-ui-doc-enable nil))
+(when (eq system-type 'windows-nt)
+  (global-set-key (kbd "C-M-c C-z") 'xref-find-def)
+  (global-set-key (kbd "C-M-c C-v") 'xref-find-definitions))
+
+
 
 ;; python stuff
 ;; (add-hook 'python-mode-hook
@@ -548,6 +559,7 @@
 
 ;; Rust
 (use-package rustic)
+(setq rustic-lsp-client 'eglot)
 
 ;; can't seem to get this to work with use-package so putting it here
 (add-hook 'rustic-mode-hook
@@ -599,7 +611,7 @@
     ;; :config
     ;; (eat-eshell-mode)
     ;; (setq eshell-visual-commands '()))
-  )
+  ))
 
 ;; Dired Options ------------------------------------------------------------------------------------
 (require 'dired-x)
