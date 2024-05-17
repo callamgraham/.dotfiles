@@ -175,13 +175,21 @@
   (insert "{}")
   (backward-char))
 
+(defun insert-matching-anglebrackets ()
+  "Insert a matching parenthesis in programming modes and move the cursor back by one character."
+  (interactive)
+  (insert "<>")
+  (backward-char))
+
 (add-hook 'prog-mode-hook
           (lambda ()
             (local-set-key (kbd "(") 'insert-matching-parenthesis)
 	    (local-set-key (kbd "[") 'insert-matching-brackets)
 	    (local-set-key (kbd "'") 'insert-matching-quotations)
 	    (local-set-key (kbd "\"") 'insert-matching-doublequotations)
-	    (local-set-key (kbd "{") 'insert-matching-curlybrackets)))
+	    (local-set-key (kbd "{") 'insert-matching-curlybrackets)
+	    (local-set-key (kbd "{") 'insert-matching-anglebrackets)
+	    ))
 
 
 (global-set-key (kbd "C-M-c s") 'add-surrounding-char)
@@ -546,8 +554,9 @@
     (lsp-ui-doc-enable nil)))
 
 (when (eq system-type 'windows-nt)
-  (global-set-key (kbd "C-M-c C-z") 'xref-find-def)
-  (global-set-key (kbd "C-M-c C-v") 'xref-find-definitions))
+  (add-hook 'python-mode-hook 'eglot-ensure)
+  (global-set-key (kbd "C-M-c C-z") 'xref-find-definitions)
+  (global-set-key (kbd "C-M-c C-v") 'eldoc))
 
 
 

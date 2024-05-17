@@ -70,6 +70,7 @@
 				      "rsync"
 				      "htop"
 				      "ntfs-3g"
+				      "udiskie"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
@@ -93,6 +94,7 @@
 				      "transmission:gui"
 				      "mpv"
 				      "feh"
+				      "libheif"
 				      
 				      ;; programming
 				      "cmake"
