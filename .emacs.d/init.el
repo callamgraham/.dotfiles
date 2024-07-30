@@ -1,5 +1,5 @@
 ;;; package -- Summary
-;; Commentary:
+;;; Commentary:
 ; Emacs configuration for cig
 
 ;; setup proxy information for windows
@@ -485,12 +485,11 @@
     ("s" (lambda () (interactive) (dired (getenv "USERDIR"))) "s_id folder" :exit t)
     ("b" (lambda () (interactive) (dired "H:/65z/Private Client Admin/MPP Models & Trading/Mutual Fund Bulk Orders")) "Reports" :exit t)
     ("n" (lambda () (interactive) (dired "~/Documents/Notes")) "Notes" :exit t)
+    ("p" (lambda () (interactive) (dired (concat (getenv "USERDIR") "/Projects"))) "Projects" :exit t)
     ("q" nil "Quit" :exit t))
   )
 
 (global-set-key (kbd "C-M-c d") 'hydra-open-projects-dired/body)
-
-
 
 ;;Beacon - light up the cursor line on switches
 (use-package beacon
@@ -508,13 +507,13 @@
 ;; Languages ------------------------------------------------------------------------------------
 
 ;; Tree Sitter for highlighting and navigation
-(when (eq system-type 'gnu/linux)
-  (use-package tree-sitter-langs)
-  (use-package tree-sitter
-    :config
-    (require 'tree-sitter-langs)
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
+;; (when (eq system-type 'gnu/linux)
+;;   (use-package tree-sitter-langs)
+;;   (use-package tree-sitter
+;;     :config
+;;     (require 'tree-sitter-langs)
+;;     (global-tree-sitter-mode)
+;;     (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
 
 ;; flycheck for checking errors
 (when (eq system-type 'gnu/linux)
@@ -529,7 +528,8 @@
   (use-package lsp-mode
     :commands lsp
     :hook
-    ((python-mode . lsp))
+    ((python-mode . lsp)
+    (rustic-mode . lsp-deferred))
     :custom
     ;; what to use when checking on-save. "check" is default, I prefer clippy
     (lsp-rust-analyzer-cargo-watch-command "clippy")
@@ -567,11 +567,19 @@
 ;;             (local-set-key (kbd "M-TAB") 'dired-find-file)))
 
 ;; Rust
-(use-package rustic)
-(setq rustic-lsp-client 'eglot)
+(use-package rust-mode
+  :init
+  (setq rust-mode-treesitter-derive t))
+
+(use-package rustic
+  :init
+  (setq rustic-cargo-bin-remote "cargo"
+        rustic-treesitter-derive t))
 
 ;; can't seem to get this to work with use-package so putting it here
 (add-hook 'rustic-mode-hook
+	  ;; (add-hook 'rustic-mode-hook #'tree-sitter-mode)
+	  ;; (add-hook 'rustic-mode-hook #'tree-sitter-hl-mode)
           (lambda ()
             (local-set-key (kbd "C-c C-c r") 'rustic-cargo-run)     ; swap run and rm
             (local-set-key (kbd "C-c C-c C-r") 'rustic-cargo-rm)
@@ -586,13 +594,30 @@
 
 ;; avy movement
 (use-package avy
-  :bind (("C-M-a" . avy-goto-char)
+  :bind (("<menu>" . avy-goto-char)
          ("C-M-'" . avy-goto-line))
   )
 
 (setq avy-keys-alist
       `((avy-goto-char . ,(number-sequence ?1 ?9))
         (avy-goto-line . ,(number-sequence ?1 ?9))))
+
+;; highlight line
+
+(defvar my-highlight-overlay nil
+  "Overlay for highlighting the current line.")
+
+(defun my-highlight-line ()
+  "Highlight the current line or move the highlight to the next line."
+  (interactive)
+  (if (not my-highlight-overlay)
+      (setq my-highlight-overlay (make-overlay (line-beginning-position) (line-end-position)))
+    (move-overlay my-highlight-overlay (line-beginning-position 2) (line-end-position 2)))
+  (overlay-put my-highlight-overlay 'face '(:background "yellow")))
+
+(global-set-key (kbd "C-M-.") 'my-highlight-line)
+
+
 
 ;; Eshell ------------------------------------------------------------------------------------
 (use-package eshell-prompt-extras)
@@ -702,7 +727,7 @@
   ;; Remember to check the doc strings of those variables.
   (setq denote-directory (expand-file-name "~/Documents/Notes/"))
   (when (eq system-type 'windows-nt)
-    (setq denote-known-keywords '("PC Meeting" "Condo Meeting" "Investment Committee" "Client Call" "Misc")))
+    (setq denote-known-keywords '("pcmeeting" "condomeeting" "investmentcommittee" "clientcall" "misc")))
   (when (eq system-type 'gnu/linux)
     (setq denote-known-keywords '("journal")))
   (setq denote-infer-keywords t)
@@ -730,7 +755,7 @@
   
   ;; If you use Markdown or plain text files (Org renders links as buttons
   ;; right away)
-  (add-hook 'find-file-hook #'denote-link-buttonize-buffer)
+  ;; (add-hook 'find-file-hook #'denote-link-buttonize-buffer)
   
   ;; We use different ways to specify a path for demo purposes.
   ;; (setq denote-dired-directories

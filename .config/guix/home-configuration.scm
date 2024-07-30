@@ -102,7 +102,22 @@
 				      "gcc-objc:lib"
                                       "git"				   
 				      "python"
+				      "rust"
+				      "rust-cargo"
+				      "rust-cargo-edit"
+				      "rust-cargo-util"
+				      "rust-cargo-toml"
+				      "rust-analyzer"
+				      "rust-clippy"
 
+				      ;; tree sitter grammars
+				      "tree-sitter-rust"
+				      "tree-sitter-python"
+				      "tree-sitter-bash"
+				      "tree-sitter-dockerfile"
+				      "tree-sitter-latex"
+				      "tree-sitter-org"
+				      
 				      ;; other...
                                       "vim"))))
 
