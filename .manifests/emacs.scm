@@ -1,6 +1,6 @@
 (specifications->manifest
  '(
-   "emacs"
+   "emacs-next-pgtk"
    "emacs-async"
    "emacs-avy"
    "emacs-beacon"
@@ -37,5 +37,4 @@
    "emacs-which-key"
    "emacs-pinentry"
    "pinentry-emacs"
-
    ))
