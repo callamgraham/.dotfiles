@@ -188,7 +188,7 @@
 	    (local-set-key (kbd "'") 'insert-matching-quotations)
 	    (local-set-key (kbd "\"") 'insert-matching-doublequotations)
 	    (local-set-key (kbd "{") 'insert-matching-curlybrackets)
-	    (local-set-key (kbd "{") 'insert-matching-anglebrackets)
+	    (local-set-key (kbd "<") 'insert-matching-anglebrackets)
 	    ))
 
 
@@ -261,11 +261,15 @@
   (async-bytecomp-package-mode 1) ; allows emacs lisp code to be compiled asynchroniosly
   :custom (async-bytecomp-allowed-packages '(all))) ; all packages are allowed to use async
 
+;; compat - i think this iss needed for emacs-next
+(use-package compat)
+
 ;;; COMPLETION ---------------------------------------------------
 ;; vertico provides the minibuffer completion framework
 ;; orderless, consult, and marginalia all make use of vertico and are
 ;; loaded along with it
 (use-package vertico
+  :ensure t ;; using this for now because vertico needs to be recompiled
   :init
   ; orderless allows for fuzzy completions
   (use-package orderless
@@ -630,7 +634,8 @@
     (autoload 'epe-theme-lambda "eshell-prompt-extras")
     (setq eshell-visual-commands '("htop" "zsh" "vim")
 	  eshell-highlight-prompt nil
-	  eshell-prompt-function 'epe-theme-lambda)))
+	  eshell-prompt-function 'epe-theme-lambda))
+  )
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)

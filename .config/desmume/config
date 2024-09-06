@@ -1,0 +1,16 @@
+[JOYKEYS]
+A=513
+B=512
+Select=517
+Start=520
+Right=513
+Left=0
+Up=2
+Down=3
+R=516
+L=518
+X=516
+Y=515
+Debug=65535
+Boost=65535
+Lid=514
