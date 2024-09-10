@@ -6,6 +6,14 @@ idle-timeout = 0
 
 [keys.normal]
 "backspace" = {c = ":sh cargo check", b = ":sh cargo build",r = ":sh cargo run", w = ":sh cargo build --target x86_64-pc-windows-gnu"}
+C-j = "save_selection"
+C-s = ":w"
+"pageup" = "page_cursor_half_up"
+"pagedown" = "page_cursor_half_down"
+"C-A-d" = "goto_word"
+
+[keys.insert]
+C-c = "normal_mode"
 
 [editor.lsp]
 display-messages = true
