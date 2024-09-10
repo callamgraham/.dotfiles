@@ -6,7 +6,7 @@ promptinit
 
 export EDITOR=/usr/bin/helix
 export ZSH="$HOME/.oh-my-zsh"
-
+export GPG_TTY=$(tty)
 alias hx="helix"
 
 ZSH_THEME="robbyrussell"
