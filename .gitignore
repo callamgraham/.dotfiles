@@ -2,3 +2,4 @@
 !.emacs.d/init.el
 !.emacs.d/backups
 .emacs.d/backups/
+.config/nushell/history.txt
