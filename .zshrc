@@ -29,3 +29,9 @@ function y() {
 }
 
 eval "$(zoxide init zsh)"
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/callam/.dart-cli-completion/zsh-config.zsh ]] && . /home/callam/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
