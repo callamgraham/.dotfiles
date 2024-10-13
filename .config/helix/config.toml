@@ -11,9 +11,15 @@ C-s = ":w"
 "pageup" = "page_cursor_half_up"
 "pagedown" = "page_cursor_half_down"
 "C-A-d" = "goto_word"
+X = "extend_line_above"
+A-x = "extend_to_line_bounds"
+
+[keys.select]
+X = "extend_line_above"
+A-x = "extend_to_line_bounds"
 
 [keys.insert]
-C-c = "normal_mode"
+# C-c = "normal_mode" add some discipline
 
 [editor.lsp]
 display-messages = true
