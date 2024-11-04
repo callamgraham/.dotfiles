@@ -1,4 +1,4 @@
-(specifications->manifest
+>(specifications->manifest
  '(
    "emacs-pgtk"
    "emacs-async"
@@ -40,4 +40,6 @@
    "emacs-which-key"
    "emacs-pinentry"
    "pinentry-emacs"
+   "emacs-multiple-cursors"
+   "emacs-eat"
    ))
