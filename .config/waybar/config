@@ -1,36 +1,41 @@
 {
-    "modules-left": ["hyprland/workspaces", "hyprland/submap"],
-    "modules-center": ["clock", "idle_inhibitor"],
-    "modules-right": ["tray", "pulseaudio", "custom/power"],
+    "modules-left": ["sway/workspaces"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["memory", "pulseaudio", "clock", "custom/power"],
 
-    // "sway/mode": {
-        // "format": "<span style=\"italic\">{}</span>"
-    // },
-
-    "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ifname} ",
-        "format-disconnected": "", 
+    "sway/window": {
+        "format": "{title}",
         "max-length": 50,
-        "on-click": "alacritty 'nmtui'"
     },
 
-    "idle_inhibitor": {
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        },
+            "1": "",
+            "2": "",
+	    "3": "",
+	    "4": "",
+	    "5": "",
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
     },
-    "tray": {
-        "icon-size": 15,
-        "spacing": 10
-    },
+
     "clock": {
+        "format" : "{:%I:%M %p}",
         // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         // "format-alt": "{:%Y-%m-%d}"
-		"on-click": "gnome-calendar"
     },
+
+    "memory": {
+        "interval": 30,
+        "format": "{}% ",
+        "max-length": 10
+    },
+    
     "pulseaudio": {
         "format": "{volume}% {icon} ",
         "format-bluetooth": "{volume}% {icon} {format_source}",
@@ -50,16 +55,7 @@
         "on-click": "pavucontrol"
     },
 	"custom/power": {
-		"format": " ",
-		"on-click": "wlogout"
+		"format": "",
+		"on-click": "swaynag -t warning -m 'Power Menu Options' -b 'Logout' 'swaymsg exit' -b 'Restart' 'sudo reboot' -b 'Shutdown'  'sudo shutdown' --background=#005566 --button-background=#009999 --button-border=#002b33 --border-bottom=#002b33"
 	},
-    "custom/scratchpad-indicator": {
-        "format-text": "{}hi",
-        "return-type": "json",
-        "interval": 3,
-        "exec": "~/.local/bin/scratchpad-indicator 2> /dev/null",
-        "exec-if": "exit 0",
-        "on-click": "swaymsg 'scratchpad show'",
-        "on-click-right": "swaymsg 'move scratchpad'"
-    }
 }

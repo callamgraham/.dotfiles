@@ -29,6 +29,11 @@
 
 (setq visible-bell t); Set up the visible bell
 
+;; pixel scrolling
+(if (eq system-type 'gnu/linux)
+    setq pixel-scroll-mode t
+    )
+
 ;; Transparency
 ;; (set-frame-parameter nil 'alpha-background 70)
 ;; (add-to-list 'default-frame-alist '(alpha-background . 70))
@@ -103,10 +108,11 @@
 (global-set-key (kbd "<f6>")  'magit-status)
 (global-set-key (kbd "<f8>")  'kill-buffer)
 (global-set-key (kbd "<f7>")  'eshell)
-(when (eq system-type 'gnu/linux)
-  (global-set-key (kbd "<f9>")  'vterm))
-(when (eq system-type 'windows-nt)
-  (global-set-key (kbd "<f9>")  'eat))
+;; (when (eq system-type 'gnu/linux)
+  ;; (global-set-key (kbd "<f9>")  'vterm))
+;; (when (eq system-type 'windows-nt)
+  ;; (global-set-key (kbd "<f9>")  'eat))
+(global-set-key (kbd "<f9>")  'eat))
 
 (global-set-key (kbd "TAB")  'indent-according-to-mode)
 (global-set-key (kbd "C-M-b")  'comment-line)
@@ -200,7 +206,7 @@
   (set-face-attribute 'default nil
                     :family "JetBrains Mono"
                     :height '120
-                    :weight 'light
+                    :weight 'normal
                     ))
 ; Windows font
 (when (eq system-type 'windows-nt)
@@ -277,7 +283,7 @@
     :custom (completion-styles '(orderless flex)))
 
   ;; Consult provides extra completion functions, such as buffer switching,
-  ;; line searching, and general fuzzy finding
+  ;; line searching, and general fuzzy finding 
   (use-package consult
     :bind (("C-M-c C-M-c" . consult-buffer)           ;; buffer switchign
            ("C-M-c g"       . consult-kmacro)           ;; run macro from the macro-rink
@@ -431,15 +437,15 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-palenight t)
+  (load-theme 'doom-gruvbox t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
+  ;; (setq doom-themes-treemacs-theme "doom-gruvbox") ; use "doom-colors" for less minimal icon theme
+  ;; (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
@@ -671,7 +677,7 @@
 (defun my-dired-up-directory ()
   "Move up one directory in Dired mode."
   (interactive)
-  (dired-single-up-directory)
+  (dired-up-directory)
   (recenter))
 
 ; default to hide files
@@ -689,9 +695,9 @@
 
 (setq dired-kill-when-opening-new-dired-buffer t) ; opening dired will kill existing dired buffers
 
-(use-package dired-single
-  :ensure t ;; no guix
-  :commands (dired dired-jump))
+;; (use-package dired-single
+  ;; :ensure t ;; no guix
+  ;; :commands (dired dired-jump))
 
 ;; (use-package all-the-icons-dired
   ;; :hook (dired-mode . all-the-icons-dired-mode))

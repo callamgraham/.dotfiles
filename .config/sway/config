@@ -48,7 +48,7 @@ set $menu  wofi --show drun -I | xargs swaymsg exec --
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /home/callam/Wallpaper/clouds.jpeg fill
+output * bg /home/callam/.dotfiles/.wallpaper/banff.jpg fill
 
 #
 # Example configuration:
@@ -95,13 +95,13 @@ input 5426:132:Razer_Razer_DeathAdder_V2 {
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+q exec $term
 
     # Kill focused window
     bindsym $mod+Delete kill
 
     # Start your launcher
-    bindsym $mod+comma exec $menu
+    bindsym $mod+w exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.

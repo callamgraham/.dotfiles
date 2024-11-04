@@ -72,7 +72,6 @@
 				      "htop"
 				      "ntfs-3g"
 				      "udiskie"
-				      "hyprland" ; trying this out
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
@@ -208,15 +207,6 @@ allow-loopback-pinentry")
 		    "ac662eaca8b75b91adbf685904d308a7f34c32c2"
 		    (openpgp-fingerprint
 		     "6DF3 6F47 6B7F 26E1 6861  5C2A 173B 393D E95E D1AE"))))
-		 (channel
-		  (name 'rosenthal)
-		  (url "https://codeberg.org/hako/rosenthal.git")
-		  (branch "trunk")
-		  (introduction
-		   (make-channel-introduction
-		    "7677db76330121a901604dfbad19077893865f35"
-		    (openpgp-fingerprint
-		     "13E7 6CD6 E649 C28C 3385  4DF5 5E5A A665 6149 17F7"))))
 		 
 		 ))
 
@@ -256,13 +246,13 @@ allow-loopback-pinentry")
 	 (service home-files-service-type
 		  
 		  `(
-		    (".tmux.conf" ,(local-file "/home/callam/.dotfiles/tmux.conf"))
+		    ;;(".tmux.conf" ,(local-file "/home/callam/.dotfiles/tmux.conf"))
 		    (".gitconfig" ,(local-file "/home/callam/.dotfiles/gitconfig"))
 
 		    ;; emacs
 		    (".emacs.d/init.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/init.el"))
-		    (".emacs.d/etc/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/etc/eshell/aliases"))
-		    ;; (".emacs.d/custom.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/etc/eshell/aliases")) ;; not sure i can do this with the custom file as its read only
+		    ;;(".emacs.d/etc/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/etc/eshell/aliases"))
+		    (".emacs.d/custom.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases")) ;; not sure i can do this with the custom file as its read only
 		    ;; gpg superceded by the gpg service above?
 		    ;; (".gnupg/gpg-agent.conf" ,(local-file "/home/callam/.dotfiles/.gnupg/gpg-agent.conf"))
 		    ))

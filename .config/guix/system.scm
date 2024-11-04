@@ -132,7 +132,7 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
                 (targets (list "/boot/efi"))
                 (keyboard-layout keyboard-layout)))
   (swap-devices (list (swap-space
-		       (target (uuid "d212b416-ffb8-4720-b865-0b8907390dc9"))
+		       (target "/dev/nvme1n1p2")
 		       )))
 
   ;; The list of file systems that get "mounted".  The unique
@@ -140,30 +140,27 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   ;; by running 'blkid' in a terminal.
   (file-systems (cons* (file-system
                          (mount-point "/")
-                         (device (uuid
-                                  "38e7122c-604f-41e7-a48f-95d73a2e3c8b"
-                                  'ext4))
+                         (device "/dev/nvme1n1p3")
                          (type "ext4"))
 		       
                        (file-system
                          (mount-point "/boot/efi")
-                         (device (uuid "19F4-7892"
-                                       'fat32))
+                         (device "/dev/nvme1n1p1")
                          (type "vfat"))
 
 		       ;; TODO need to add mount option to give user rw permissions, something tike (option "umask=0022,uid=1000")
                        (file-system
                          (mount-point "/extra/ssd1")
-                         ;; (device "/dev/sda1")
-			 (device (uuid "5a7d7e88-c601-48fa-8d44-660cf07d0129"))
+                         (device "/dev/sda1")
+			 ;; (device (uuid "5a7d7e88-c601-48fa-8d44-660cf07d0129"))
                          (type "ext4")
 			 (create-mount-point? #t)
 			 )
 
                        (file-system
                          (mount-point "/extra/nvme1")
-                         ;; (device "/dev/nvme0n1p1")
-			 (device (uuid "6ec2c6e9-1c9d-446c-b2b5-562302f7b3c1"))
+                         (device "/dev/nvme0n1p1")
+			 ;; (device (uuid "6ec2c6e9-1c9d-446c-b2b5-562302f7b3c1"))
                          (type "ext4")
 			 (create-mount-point? #t)
 			 )
