@@ -1,4 +1,4 @@
->(specifications->manifest
+(specifications->manifest
  '(
    "emacs-pgtk"
    "emacs-async"
@@ -16,6 +16,7 @@
    "emacs-ellama"
    "emacs-ement"
    "emacs-expand-region"
+   "emacs-eshell-git-prompt"
    "emacs-eshell-prompt-extras"
    "emacs-flycheck"
    "emacs-geiser-guile"
@@ -34,6 +35,7 @@
    "emacs-lsp-ui"
    "emacs-rustic"
    "emacs-all-the-icons-dired"
+   "emacs-nerd-icons"
    "emacs-vterm"
    "emacs-vertico"
    "libvterm"
@@ -42,4 +44,5 @@
    "pinentry-emacs"
    "emacs-multiple-cursors"
    "emacs-eat"
+   "emacs-org-bullets"
    ))

@@ -63,6 +63,7 @@
 				      "flatpak"
 				      "zip"
 				      "unzip"
+				      "unrar-free"
 				      "xdg-user-dirs"
 				      "p7zip"
 				      "neofetch" ; shows user info
@@ -72,9 +73,11 @@
 				      "htop"
 				      "ntfs-3g"
 				      "udiskie"
+				      "zoxide"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
+				      "qutebrowser"
 
 				      ;; office
 				      "libreoffice"
@@ -87,6 +90,8 @@
 				      "font-jetbrains-mono"
 				      "breeze-icons"
 				      "font-microsoft-web-core-fonts"
+				      "adwaita-icon-theme"
+				      "emacs-nerd-icons"
 
 				      ;; media
 				      "qpwgraph"
@@ -132,6 +137,8 @@
                   (aliases '(("grep" . "grep --color=auto")
 			     ("ll" . "ls -l")
                              ("ls" . "ls -p --color=auto")
+			     ("unrar" . "unrar-free")
+			     ("z" . "zoxide")
 			     ("update-home" . "guix home reconfigure ~/.dotfiles/.config/guix/home-configuration.scm")
 			     ("update-system" . "sudo -E guix system reconfigure /home/callam/.dotfiles/.config/guix/system.scm")
 			     ;;("update-emacs" . "guix package --manifest=/home/callam/.dotfiles/.manifests/emacs.scm --profile=/home/callam/.emacs-profile")
@@ -207,21 +214,23 @@ allow-loopback-pinentry")
 		    "ac662eaca8b75b91adbf685904d308a7f34c32c2"
 		    (openpgp-fingerprint
 		     "6DF3 6F47 6B7F 26E1 6861  5C2A 173B 393D E95E D1AE"))))
-		 
 		 ))
 
-	 ;; setup env variables
-	 (simple-service 'some-useful-env-vars-service
-		home-environment-variables-service-type
-		`(("GUIX_SANDBOX_HOME" . "/extra/nvme1/sandbox") ;; used for nonguix containers
-		  ("XDG_DATA_DIRS" . "$XDG_DATA_DIRS:/home/callam/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share/applications") ;; so wofi can launch flatpaks
-		  ("EDITOR" . "emacsclient")
-		  ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
-		  ("PATH" . "$PATH:/home/callam/.bin:/home/callam/.emacs-profile/bin")
-		  ("XDG_CURRENT_DESKTOP" . "sway")))
+	;; setup sway window manager
+	
+	
+	;; setup env variables
+	(simple-service 'some-useful-env-vars-service
+			home-environment-variables-service-type
+			`(("GUIX_SANDBOX_HOME" . "/extra/nvme1/sandbox") ;; used for nonguix containers
+			  ("XDG_DATA_DIRS" . "$XDG_DATA_DIRS:/home/callam/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share/applications") ;; so wofi can launch flatpaks
+			  ("EDITOR" . "emacsclient")
+			  ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
+			  ("PATH" . "$PATH:/home/callam/.bin:/home/callam/.emacs-profile/bin")
+			  ("XDG_CURRENT_DESKTOP" . "sway")))
 	 
-	 ;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
-	 (service home-xdg-configuration-files-service-type
+	;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
+	(service home-xdg-configuration-files-service-type
 		  
 		  `(
 		    ;; sway
@@ -251,8 +260,8 @@ allow-loopback-pinentry")
 
 		    ;; emacs
 		    (".emacs.d/init.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/init.el"))
-		    ;;(".emacs.d/etc/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/etc/eshell/aliases"))
-		    (".emacs.d/custom.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases")) ;; not sure i can do this with the custom file as its read only
+		    (".emacs.d/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases"))
+		    ;; (".emacs.d/custom.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases")) ;; not sure i can do this with the custom file as its read only
 		    ;; gpg superceded by the gpg service above?
 		    ;; (".gnupg/gpg-agent.conf" ,(local-file "/home/callam/.dotfiles/.gnupg/gpg-agent.conf"))
 		    ))

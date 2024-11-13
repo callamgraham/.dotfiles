@@ -15,6 +15,7 @@
   (guix channels)
   (gnu home services guix)
   (gnu packages linux)
+  (gnu packages display-managers)
   (nongnu packages linux)
   (nongnu system linux-initrd)
   )
@@ -83,6 +84,8 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 		     mesa
 		     pipewire
 		     wireplumber
+		     abstractdark-sddm-theme
+		     sugar-dark-sddm-theme
 		     alacritty)
                     %base-packages))
 
@@ -91,7 +94,13 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 
   (services (append (list
 			  ;; configure env variables
-		     (service sddm-service-type)
+		     (service sddm-service-type
+			      (sddm-configuration
+			       ;; (display-server "wayland")
+			       (themes-directory "/run/current-system/profile/share/sddm/themes")
+			       (theme "abstractdark")
+			       ;; (theme "sugar-dark")
+			       ))
 		     (service containerd-service-type)
 		     (service docker-service-type)
 		     (simple-service 'variant-packages-service
@@ -105,25 +114,6 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 					 "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
 					 (openpgp-fingerprint
 					  "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
-				      (channel
-				       (name 'rosenthal)
-				       (url "https://codeberg.org/hako/rosenthal.git")
-				       (branch "trunk")
-				       (introduction
-					(make-channel-introduction
-					 "7677db76330121a901604dfbad19077893865f35"
-					 (openpgp-fingerprint
-					  "13E7 6CD6 E649 C28C 3385  4DF5 5E5A A665 6149 17F7"))))
-				      (channel
-				       (name 'guix-gaming-games)
-				       (url "https://gitlab.com/guix-gaming-channels/games.git")
-				       ;; Enable signature verification:
-				       (introduction
-					(make-channel-introduction
-					 "c23d64f1b8cc086659f8781b27ab6c7314c5cca5"
-					 (openpgp-fingerprint
-					  "50F3 3E2E 5B0C 3D90 0424  ABE8 9BDC F497 A4BB CC7F"))))
-				      
 				      )))
 		    %my-desktop-services))
   

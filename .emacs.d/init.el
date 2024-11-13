@@ -31,7 +31,7 @@
 
 ;; pixel scrolling
 (if (eq system-type 'gnu/linux)
-    setq pixel-scroll-mode t
+    (setq pixel-scroll-mode t)
     )
 
 ;; Transparency
@@ -76,8 +76,12 @@
   (scroll-down)
   (recenter))
 
+; bind custom scroll to page up and down
 (global-set-key [next] 'my-scroll-up)
 (global-set-key [prior] 'my-scroll-down)
+
+; allow scroll to go to the top and bottom of buffers?
+(setq scroll-error-top-bottom t)
 
 ;; backup files
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -112,7 +116,7 @@
   ;; (global-set-key (kbd "<f9>")  'vterm))
 ;; (when (eq system-type 'windows-nt)
   ;; (global-set-key (kbd "<f9>")  'eat))
-(global-set-key (kbd "<f9>")  'eat))
+(global-set-key (kbd "<f9>")  'eat)
 
 (global-set-key (kbd "TAB")  'indent-according-to-mode)
 (global-set-key (kbd "C-M-b")  'comment-line)
@@ -630,17 +634,17 @@
 
 
 ;; Eshell ------------------------------------------------------------------------------------
-(use-package eshell-prompt-extras)
-
+;; (use-package eshell-prompt-extras)
+(use-package eshell-git-prompt)
 (use-package eshell
   :bind ("<f7>" . eshell)
   :config
-
-  (with-eval-after-load 'esh-opt
-    (autoload 'epe-theme-lambda "eshell-prompt-extras")
-    (setq eshell-visual-commands '("htop" "zsh" "vim")
-	  eshell-highlight-prompt nil
-	  eshell-prompt-function 'epe-theme-lambda))
+  (eshell-git-prompt-use-theme 'robbyrussell)
+  ;; (with-eval-after-load 'esh-opt
+    ;; (autoload 'epe-theme-lambda "eshell-prompt-extras")
+    ;; (setq eshell-visual-commands '("htop" "zsh" "vim")
+	  ;; eshell-highlight-prompt nil
+	  ;; eshell-prompt-function 'epe-theme-lambda))
   )
 
 ;; Vterm
@@ -712,6 +716,11 @@
 				("MOV" . "mpv")
 				("mp4" . "mpv"))))
 
+;; icons
+;; (use-package all-the-icons)
+;; (use-package all-the-icons-dired)
+;; (use-package nerd-icons)
+;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
 ;; (use-package dired-hide-dotfiles)
 
@@ -724,7 +733,14 @@
 ;; (add-hook 'dired-mode-hook #'my-dired-mode-hook)
 
 ;; Org stuff ------------------------------------------------------------------------------------
-(use-package org)
+(use-package org
+  :config
+  (setq org-ellipsis " ▾"))
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 ;; use autolist for automatic indenting in org mode
 (use-package org-autolist 

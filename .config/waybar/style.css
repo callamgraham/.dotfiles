@@ -1,7 +1,7 @@
 * {
     border: none;
     font-family: Font Awesome, Roboto, Arial, sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: #ffffff;
     border-radius: 20px;
 }
@@ -23,7 +23,7 @@ window#waybar {
 }
 .modules-left {
     margin: 2px 0 0 5px;
-	background-color: rgba(0,119,179,0.6);
+	background-color: rgba(0,43,51,0.85);
 }
 /*-----modules indv----*/
 #workspaces button {

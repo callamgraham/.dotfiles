@@ -43,7 +43,7 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu  wofi --show drun -I | xargs swaymsg exec --
+set $menu wofi --show drun -I | xargs swaymsg exec --
 
 ### Output configuration
 #
@@ -101,7 +101,7 @@ input 5426:132:Razer_Razer_DeathAdder_V2 {
     bindsym $mod+Delete kill
 
     # Start your launcher
-    bindsym $mod+w exec $menu
+    bindsym $mod+Return exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
