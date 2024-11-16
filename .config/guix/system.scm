@@ -78,15 +78,16 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   ;; for packages and 'guix install PACKAGE' to install a package.
   (packages (append (list 
 		     vim
-		     sway
-		     wofi
-		     waybar
+		     sway ;; needs to be here so sddm recognizes it?
+		     ;; wofi
+		     ;; waybar
 		     mesa
 		     pipewire
 		     wireplumber
 		     abstractdark-sddm-theme
 		     sugar-dark-sddm-theme
-		     alacritty)
+		     ;; alacritty
+		     )
                     %base-packages))
 
   ;; Below is the list of system services.  To search for available

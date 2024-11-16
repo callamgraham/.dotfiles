@@ -35,7 +35,8 @@
              (gnu home services shells)
 	     (gnu home services guix)
 	     (gnu home services gnupg)
-	     (gnu home services ssh))
+	     (gnu home services ssh)
+	     (gnu home services sway))
 
 (home-environment
   ;; Below is the list of packages that will show up in your
@@ -74,6 +75,11 @@
 				      "ntfs-3g"
 				      "udiskie"
 				      "zoxide"
+
+				      ;; UI
+				      "wofi"
+				      "waybar"
+				      "alacritty"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
@@ -217,7 +223,104 @@ allow-loopback-pinentry")
 		 ))
 
 	;; setup sway window manager
-	
+	(service home-sway-service-type
+		 (sway-configuration
+		  (variables `(
+			       (mod . "Mod4") ; Window key as mod
+			       (term . "alacritty") ; alacritty for terminal
+			       (menu . "wofi --show drun -I | xargs swaymsg exec --")
+			       (left . "h")
+			       (right . "l")
+			       (up . "j")
+			       (down . "k")))
+		  (inputs
+		   (list (sway-input
+			  (identifier '*)
+			  (extra-content '("xkb_numlock enable")))
+			 (sway-input
+			  (identifier "5426:132:Razer_Razer_DeathAdder_V2")
+			  (extra-content '("pointer_accel -0.6")))))
+		  (outputs
+		   (list
+		    (sway-output
+		     (identifier "DP-3")
+		     (resolution "2560x1440")
+		     (position (point (x 0) (y 0)))
+		     (background "/home/callam/.dotfiles/.wallpaper/banff.jpg")
+		     (extra-content '("adaptive_sync on")))
+		    (sway-output
+		     (identifier "HDMI-A-1")
+		     (resolution "1920x1080")
+		     (position (point (x 2560) (y 0)))
+		     (background "/home/callam/.dotfiles/.wallpaper/banff.jpg"))
+		    ))
+		  (startup-programs '())
+		  (startup+reload-programs '("/home/callam/.bin/primary_monitor" "waybar"))
+		  (gestures '())
+		  (keybindings `(
+				 ($mod+Return . "exec $menu")
+				 ($mod+Shift+q . "kill")
+				 ($mod+t . "exec $term")
+				 ($mod+Shift+c . "reload")
+				 ($mod+Left . "focus left")
+				 ($mod+Down . "focus down")
+				 ($mod+Up . "focus up")
+				 ($mod+Right . "focus right")
+				 ($mod+Shift+Left . "move left")
+				 ($mod+Shift+Down . "move down")
+				 ($mod+Shift+Up . "move up")
+				 ($mod+Shift+Right . "move right")
+				 ($mod+1 . "workspace number 1")
+				 ($mod+2 . "workspace number 2")
+				 ($mod+3 . "workspace number 3")
+				 ($mod+4 . "workspace number 4")
+				 ($mod+5 . "workspace number 5")
+				 ($mod+6 . "workspace number 6")
+				 ($mod+7 . "workspace number 7")
+				 ($mod+8 . "workspace number 8")
+				 ($mod+9 . "workspace number 9")
+				 ($mod+0 . "workspace number 10")
+				 ($mod+Shift+1 . "move container to workspace number 1")
+				 ($mod+Shift+2 . "move container to workspace number 2")
+				 ($mod+Shift+3 . "move container to workspace number 3")
+				 ($mod+Shift+4 . "move container to workspace number 4")
+				 ($mod+Shift+5 . "move container to workspace number 5")
+				 ($mod+Shift+6 . "move container to workspace number 6")
+				 ($mod+Shift+7 . "move container to workspace number 7")
+				 ($mod+Shift+8 . "move container to workspace number 8")
+				 ($mod+Shift+9 . "move container to workspace number 9")
+				 ($mod+Shift+0 . "move container to workspace number 10")
+				 ($mod+b . "splith")
+				 ($mod+v . "splitv")
+				 ($mod+s . "layout stacking")
+				 ($mod+w . "layout tabbed")
+				 ($mod+e . "layout toggle split")
+				 ($mod+f . "fullscreen")
+				 ($mod+Shift+space . "floating toggle")
+				 ($mod+space . "focus mode_toggle")
+				 ($mod+a . "focus parent")
+				 ($mod+Shift+minus . "move scratchpad")
+				 ($mod+minus . "scratchpad show")
+				 ))
+		  (extra-content '("gaps inner 10"
+				   "set $rm DP-3"
+				   "set $lm HDMI-A-1"
+				   "default_border pixel 2"
+				   "workspace 1 output $rm"
+				   "workspace 2 output $lm"
+				   "workspace 3 output $lm"
+				   "workspace 4 output $lm"
+				   "workspace 5 output $lm"
+				   "workspace 6 output $lm"
+				   "workspace 7 output $lm"
+				   "workspace 8 output $lm"
+				   "workspace 9 output $lm"
+				   "workspace 10 output $lm"
+				   "exec --no-startup-id swaymsg 'workspace 2; exec /home/callam/.guix-home/profile/bin/alacritty'"
+				   "exec --no-startup-id swaymsg 'workspace 3; exec /home/callam/.guix-home/profile/bin/emacs'"
+				   "exec --no-startup-id swaymsg 'workspace 4; exec /home/callam/.guix-home/profile/bin/firefox'"
+				   ))
+		  ))
 	
 	;; setup env variables
 	(simple-service 'some-useful-env-vars-service
@@ -230,12 +333,8 @@ allow-loopback-pinentry")
 			  ("XDG_CURRENT_DESKTOP" . "sway")))
 	 
 	;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
-	(service home-xdg-configuration-files-service-type
-		  
+	(service home-xdg-configuration-files-service-type		  
 		  `(
-		    ;; sway
-		    ("sway/config" ,(local-file "/home/callam/.dotfiles/.config/sway/config"))
-
 		    ;; helix
 		    ("helix/config.toml" ,(local-file "/home/callam/.dotfiles/.config/helix/config.toml"))
 
@@ -262,8 +361,6 @@ allow-loopback-pinentry")
 		    (".emacs.d/init.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/init.el"))
 		    (".emacs.d/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases"))
 		    ;; (".emacs.d/custom.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases")) ;; not sure i can do this with the custom file as its read only
-		    ;; gpg superceded by the gpg service above?
-		    ;; (".gnupg/gpg-agent.conf" ,(local-file "/home/callam/.dotfiles/.gnupg/gpg-agent.conf"))
 		    ))
 	 
 	 
