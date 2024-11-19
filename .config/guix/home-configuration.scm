@@ -77,9 +77,12 @@
 				      "zoxide"
 
 				      ;; UI
+				      "swayfx"
 				      "wofi"
 				      "waybar"
 				      "alacritty"
+				      "openbox"
+				      "weston"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
@@ -140,6 +143,7 @@
  (services
   (list (service home-bash-service-type
                  (home-bash-configuration
+		  (environment-variables '(("XWAYLAND_DISPLAY" . "DP-3")))
                   (aliases '(("grep" . "grep --color=auto")
 			     ("ll" . "ls -l")
                              ("ls" . "ls -p --color=auto")
@@ -255,7 +259,7 @@ allow-loopback-pinentry")
 		     (background "/home/callam/.dotfiles/.wallpaper/banff.jpg"))
 		    ))
 		  (startup-programs '())
-		  (startup+reload-programs '("/home/callam/.bin/primary_monitor" "waybar"))
+		  (startup+reload-programs '("/home/callam/.guix-home/profile/bin/waybar"))
 		  (gestures '())
 		  (keybindings `(
 				 ($mod+Return . "exec $menu")
@@ -330,11 +334,15 @@ allow-loopback-pinentry")
 			  ("EDITOR" . "emacsclient")
 			  ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
 			  ("PATH" . "$PATH:/home/callam/.bin:/home/callam/.emacs-profile/bin")
+			  ;;("WLR_RENDERER" . "vulkan")
 			  ("XDG_CURRENT_DESKTOP" . "sway")))
 	 
 	;; setup dotfiles - this is effecively gnu stow, will need to flesh this out...
 	(service home-xdg-configuration-files-service-type		  
 		  `(
+		    ;; sway
+		    ;; ("sway/config" ,(local-file "/home/callam/.dotfiles/.config/sway/config"))		    
+		    
 		    ;; helix
 		    ("helix/config.toml" ,(local-file "/home/callam/.dotfiles/.config/helix/config.toml"))
 
@@ -359,7 +367,7 @@ allow-loopback-pinentry")
 
 		    ;; emacs
 		    (".emacs.d/init.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/init.el"))
-		    (".emacs.d/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases"))
+		    (".emacs.d/etc/eshell/aliases" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases"))
 		    ;; (".emacs.d/custom.el" ,(local-file "/home/callam/.dotfiles/.emacs.d/eshell/aliases")) ;; not sure i can do this with the custom file as its read only
 		    ))
 	 

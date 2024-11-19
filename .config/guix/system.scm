@@ -16,6 +16,9 @@
   (gnu home services guix)
   (gnu packages linux)
   (gnu packages display-managers)
+  (gnu packages vulkan)
+  (gnu packages openbox)
+  (gnu packages xorg)
   (nongnu packages linux)
   (nongnu system linux-initrd)
   )
@@ -78,10 +81,15 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   ;; for packages and 'guix install PACKAGE' to install a package.
   (packages (append (list 
 		     vim
-		     sway ;; needs to be here so sddm recognizes it?
+		     ;; sway ;; needs to be here so sddm recognizes it?
+		     ;; swayfx
+		     ;; xorg-server-xwayland
+		     ;; openbox
 		     ;; wofi
 		     ;; waybar
 		     mesa
+		     mesa-utils
+		     vulkan-tools
 		     pipewire
 		     wireplumber
 		     abstractdark-sddm-theme
@@ -94,16 +102,23 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
   ;; services, run 'guix system search KEYWORD' in a terminal.
 
   (services (append (list
-			  ;; configure env variables
-		     (service sddm-service-type
-			      (sddm-configuration
-			       ;; (display-server "wayland")
-			       (themes-directory "/run/current-system/profile/share/sddm/themes")
-			       (theme "abstractdark")
-			       ;; (theme "sugar-dark")
-			       ))
+		     ;; configure env variables
+		     ;; (service sddm-service-type
+		     ;; 	      (sddm-configuration
+		     ;; 	       ;; (display-server "wayland")
+		     ;; 	       (themes-directory "/run/current-system/profile/share/sddm/themes")
+		     ;; 	       (theme "abstractdark")
+		     ;; 	       ;; (theme "sugar-dark")
+		     ;; 	       ))
+
+		     ;; containers
 		     (service containerd-service-type)
 		     (service docker-service-type)
+		     
+		     ;; Set up the X11 socket directory for XWayland
+		     ;; (service x11-socket-directory-service-type)
+
+		     ;; Channels
 		     (simple-service 'variant-packages-service
 				     home-channels-service-type
 				     (list
