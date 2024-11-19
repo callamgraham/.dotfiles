@@ -287,7 +287,7 @@
     :custom (completion-styles '(orderless flex)))
 
   ;; Consult provides extra completion functions, such as buffer switching,
-  ;; line searching, and general fuzzy finding 
+  ;; line searching, and general fuzzy finding
   (use-package consult
     :bind (("C-M-c C-M-c" . consult-buffer)           ;; buffer switchign
            ("C-M-c g"       . consult-kmacro)           ;; run macro from the macro-rink
@@ -532,7 +532,7 @@
 ;; flycheck for checking errors
 (when (eq system-type 'gnu/linux)
   (use-package flycheck
-    :init (global-flycheck-mode)))  
+    :init (global-flycheck-mode)))
 
 ; lsp keybindings
 (when (eq system-type 'gnu/linux)
@@ -684,27 +684,48 @@
   (dired-up-directory)
   (recenter))
 
-; default to hide files
-;; (setq dired-omit-mode 1)
-(setq dired-omit-mode 1)
 
-(add-hook 'dired-mode-hook
-          (lambda ()
-	    (dired-hide-details-mode 1)
-	    (setq dired-omit-mode 1)
-            (local-set-key (kbd ".") 'dired-omit-mode)
-	    (local-set-key (kbd "<home>") '(find-alternate-file "~/"))
-            (local-set-key (kbd "<left>") 'my-dired-up-directory)
-            (local-set-key (kbd "<right>") 'dired-open-file)))
+;; custom hide mode, effectively makes dired omit mode global 
+(setq cg-dired-omit-mode t) ; Default to hiding files globally
+
+(defun cg-dired-update-omit-mode ()
+  "Update `dired-omit-mode` based on the value of `cg-dired-omit-mode`."
+  (interactive)
+  (if cg-dired-omit-mode
+      (dired-omit-mode 1)  ; Enable dired-omit-mode
+    (dired-omit-mode -1))) ; Disable dired-omit-mode
+
+(defun cg-dired-toggle-omit-mode ()
+  "Toggle `cg-dired-omit-mode` globally and update all Dired buffers."
+  (interactive)
+  (setq cg-dired-omit-mode (not cg-dired-omit-mode))
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (when (derived-mode-p 'dired-mode)
+        (cg-dired-update-omit-mode))))
+  (message "Dired omit mode %s" (if cg-dired-omit-mode "enabled" "disabled")))
+
+(add-hook 'dired-mode-hook #'cg-dired-update-omit-mode)
+
+;; hide details by default on dired
+(add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+; set dired keybindings
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd ".") 'cg-dired-toggle-omit-mode)
+  (define-key dired-mode-map (kbd "<left>") 'my-dired-up-directory)
+  (define-key dired-mode-map (kbd "<right>") 'dired-open-file)
+  )
+
+;; (add-hook 'dired-mode-hook
+;;           (lambda ()
+;; 	    (dired-omit-mode cg-dired-omit-mode)))
 
 (setq dired-kill-when-opening-new-dired-buffer t) ; opening dired will kill existing dired buffers
 
 ;; (use-package dired-single
   ;; :ensure t ;; no guix
   ;; :commands (dired dired-jump))
-
-;; (use-package all-the-icons-dired
-  ;; :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-open
   :commands (dired dired-jump)
@@ -715,22 +736,6 @@
                                 ("mkv" . "mpv")
 				("MOV" . "mpv")
 				("mp4" . "mpv"))))
-
-;; icons
-;; (use-package all-the-icons)
-;; (use-package all-the-icons-dired)
-;; (use-package nerd-icons)
-;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-
-;; (use-package dired-hide-dotfiles)
-
-;; (defun my-dired-mode-hook ()
-;;   ;; To hide dot-files by default
-;;   (dired-hide-dotfiles-mode))
-
-;; ;; To toggle hiding
-;; (define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
-;; (add-hook 'dired-mode-hook #'my-dired-mode-hook)
 
 ;; Org stuff ------------------------------------------------------------------------------------
 (use-package org
@@ -743,7 +748,7 @@
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 ;; use autolist for automatic indenting in org mode
-(use-package org-autolist 
+(use-package org-autolist
   :ensure t
   :hook (org-mode . org-autolist-mode))
 
