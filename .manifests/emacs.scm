@@ -45,4 +45,7 @@
    "emacs-multiple-cursors"
    "emacs-eat"
    "emacs-org-bullets"
+   "emacs-buffer-env"
+   "emacs-eshell-syntax-highlighting"
+   "emacs-capf-autosuggest"
    ))

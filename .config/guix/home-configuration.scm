@@ -113,19 +113,19 @@
 				      "imagemagick" ;; for converting image files 
 				      
 				      ;; programming
-				      "cmake"
-				      "gcc-toolchain"
+				      ;; "cmake"
+				      ;; "gcc-toolchain"
 				      ;; "gcc-objc:lib"
 				      ;; "gcc-objc"
                                       "git"				   
-				      "python"
-				      "rust"
-				      "rust-cargo"
-				      "rust-cargo-edit"
-				      "rust-cargo-util"
-				      "rust-cargo-toml"
-				      "rust-analyzer"
-				      "rust-clippy"
+				      ;; "python"
+				      ;; "rust"
+				      ;; "rust-cargo"
+				      ;; "rust-cargo-edit"
+				      ;; "rust-cargo-util"
+				      ;; "rust-cargo-toml"
+				      ;; "rust-analyzer"
+				      ;; "rust-clippy"
 
 				      ;; tree sitter grammars
 				      "tree-sitter-rust"

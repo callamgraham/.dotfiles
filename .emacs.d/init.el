@@ -41,9 +41,6 @@
 ;; ;; Enable line numbers in all buffers
 ;; (global-linum-mode t)
 
-;; ;; Disable line numbers in eshell buffers
-;; (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode 0)))
-
 ;; (setq display-line-numbers-type 'relative) ; use relative line numbers
 (define-key key-translation-map (kbd "ESC") (kbd "C-g")) ; use escape to quit stuff
 
@@ -99,6 +96,13 @@
   (setq epa-pinentry-mode 'loopback)
   (pinentry-start))
 
+;buffer env ---------------------------------------------------
+;buffer-env - change buffer local variable for use in Projects
+(when (eq system-type 'gnu/linux)
+  (add-hook 'hack-local-variables-hook #'buffer-env-update)
+  (add-hook 'comint-mode-hook #'buffer-env-update))
+(setq buffer-env-script-name '("manifest.scm" "guix.scm"))
+
 ; use line for the cursor
 (setq-default cursor-type 'bar)
 
@@ -124,6 +128,7 @@
 (global-set-key (kbd "C-s")   'save-buffer)
 (global-set-key (kbd "C-a")   'mark-whole-buffer)
 (global-set-key (kbd "C-M-c <home>")   'back-to-indentation)
+(global-set-key (kbd "C-M-c l")   'goto-line)
 
 ;; Macro keybindings
 (global-set-key (kbd "C-M-S-v")   'kmacro-start-macro)
@@ -358,10 +363,10 @@
   ;; Optionally use TAB for cycling, default is `corfu-complete'.
   :bind (:map corfu-map
               ("M-SPC" . corfu-insert-separator)
-              ("TAB"     . corfu-next)
-              ([tab]     . corfu-next)
-              ("S-TAB"   . corfu-previous)
-              ([backtab] . corfu-previous)
+              ("TAB"     . nil) ; not using tab here for now...
+              ([tab]     . nil)
+              ("S-TAB"   . nil)
+              ([backtab] . nil)
               ("<right>" . corfu-insert)
               ("RET"     . nil) ;; leave my enter alone!
               )
@@ -369,14 +374,15 @@
   :init
   (global-corfu-mode)
   (corfu-history-mode)
-  :config
+  ;; :config
   ;; (setq tab-always-indent 'complete) ; sets tab to code completion. Not sure I want that yet...
-  (add-hook 'eshell-mode-hook
-            (lambda () (setq-local corfu-quit-at-boundary t ; Quits completion if the cursor is at the beginning or end of a word.
-				   corfu-quit-no-match t ; Quits completion if no matches are found.
-                              corfu-auto nil) ; Disables auto completion.
-              (corfu-mode)))) ; enables corfu mode in eshell
-; Add extensions
+  ;; (add-hook 'eshell-mode-hook
+  ;;           (lambda () (setq-local corfu-quit-at-boundary t ; Quits completion if the cursor is at the beginning or end of a word.
+  ;; 				   corfu-quit-no-match t ; Quits completion if no matches are found.
+  ;;                             corfu-auto nil) ; Disables auto completion.
+  ;;             (corfu-mode)))) ; enables corfu mode in eshell
+					; Add extensions
+  )
 (when (eq system-type 'gnu/linux)
   (use-package cape
     :defer 10
@@ -541,9 +547,6 @@
 
   (use-package lsp-mode
     :commands lsp
-    :hook
-    ((python-mode . lsp)
-    (rustic-mode . lsp-deferred))
     :custom
     ;; what to use when checking on-save. "check" is default, I prefer clippy
     (lsp-rust-analyzer-cargo-watch-command "clippy")
@@ -567,23 +570,28 @@
     (lsp-ui-sideline-show-hover t)
     (lsp-ui-doc-enable nil)))
 
+;; python stuff ---------------------------------------------------
 (when (eq system-type 'windows-nt)
   (add-hook 'python-mode-hook 'eglot-ensure)
   (global-set-key (kbd "C-M-c C-z") 'xref-find-definitions)
   (global-set-key (kbd "C-M-c C-v") 'eldoc))
 
+(when (eq system-type 'gnu/linux)
+  (add-hook 'python-mode-hook
+            (lambda ()
+	      (buffer-env-update)
+	      (lsp))))
 
+;; Rust ---------------------------------------------------
+;; (use-package rust-mode
+;;   :init
+;;   (setq rust-mode-treesitter-derive t)
+;;   (setq rust-format-on-save t))
 
-;; python stuff
-;; (add-hook 'python-mode-hook
+;; (add-hook 'rust-mode-hook
 ;;           (lambda ()
-;;             (local-set-key (kbd "TAB") 'python-indent-right)
-;;             (local-set-key (kbd "M-TAB") 'dired-find-file)))
-
-;; Rust
-(use-package rust-mode
-  :init
-  (setq rust-mode-treesitter-derive t))
+;;             (buffer-env-update)
+;;             (lsp)))
 
 (use-package rustic
   :init
@@ -595,6 +603,8 @@
 	  ;; (add-hook 'rustic-mode-hook #'tree-sitter-mode)
 	  ;; (add-hook 'rustic-mode-hook #'tree-sitter-hl-mode)
           (lambda ()
+	    (buffer-env-update)
+	    (lsp)
             (local-set-key (kbd "C-c C-c r") 'rustic-cargo-run)     ; swap run and rm
             (local-set-key (kbd "C-c C-c C-r") 'rustic-cargo-rm)
 	    (local-set-key (kbd "C-c C-c b") 'rustic-cargo-build)   ; swap build and bench
@@ -602,11 +612,10 @@
 	    (local-set-key (kbd "C-c C-c c") 'rustic-cargo-check)   ; swap check and clean
             (local-set-key (kbd "C-c C-c C-k") 'rustic-cargo-clean)
 	    (local-set-key (kbd "C-c C-c t") 'rustic-cargo-test)    ; rebind test
-
 	    )
 	  )
 
-;; avy movement
+;; avy movement ---------------------------------------------------
 (use-package avy
   :bind (("<menu>" . avy-goto-char)
          ("C-M-'" . avy-goto-line))
@@ -637,15 +646,28 @@
 ;; (use-package eshell-prompt-extras)
 (use-package eshell-git-prompt)
 (use-package eshell
-  :bind ("<f7>" . eshell)
   :config
   (eshell-git-prompt-use-theme 'robbyrussell)
-  ;; (with-eval-after-load 'esh-opt
-    ;; (autoload 'epe-theme-lambda "eshell-prompt-extras")
-    ;; (setq eshell-visual-commands '("htop" "zsh" "vim")
-	  ;; eshell-highlight-prompt nil
-	  ;; eshell-prompt-function 'epe-theme-lambda))
-  )
+  :custom
+  (eshell-scroll-to-bottom-on-input t)
+  (eshell-cd-on-directory t)
+)
+
+;; Add the keybinding after eshell-mode is loaded
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (define-key eshell-mode-map (kbd "<tab>") 'capf-autosuggest-accept)))
+
+(use-package eshell-syntax-highlighting
+  :after eshell-mode
+  :config
+  ;; Enable in all Eshell buffers.
+  (eshell-syntax-highlighting-global-mode +1))
+
+(use-package capf-autosuggest
+  :hook ((eshell-mode . capf-autosuggest-mode))
+  :custom
+  (capf-autosuggest-dwim-next-line nil))
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)
@@ -856,7 +878,6 @@
   ;; `context-menu-mode'.
   (add-hook 'context-menu-functions #'denote-context-menu)
   )
-
 
 ;; chat stuff -----------------------------------------------------------------------------------
 (when (eq system-type 'gnu/linux)
