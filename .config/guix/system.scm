@@ -114,9 +114,9 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 		     ;; containers
 		     (service containerd-service-type)
 		     (service docker-service-type)
-		     
-		     ;; Set up the X11 socket directory for XWayland
-		     ;; (service x11-socket-directory-service-type)
+
+		     ;; firewall
+		     (service nftables-service-type)
 
 		     ;; Channels
 		     (simple-service 'variant-packages-service
