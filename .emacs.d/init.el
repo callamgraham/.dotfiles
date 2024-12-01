@@ -618,6 +618,7 @@
 ;; avy movement ---------------------------------------------------
 (use-package avy
   :bind (("<menu>" . avy-goto-char)
+	 ("<apps>" . avy-goto-char) ; for windows
          ("C-M-'" . avy-goto-line))
   )
 
@@ -654,9 +655,9 @@
 )
 
 ;; Add the keybinding after eshell-mode is loaded
-(add-hook 'eshell-mode-hook
-          (lambda ()
-            (define-key eshell-mode-map (kbd "<tab>") 'capf-autosuggest-accept)))
+;; (add-hook 'eshell-mode-hook
+          ;; (lambda ()
+            ;; (define-key eshell-mode-map (kbd "<tab>") 'capf-autosuggest-accept)))
 
 (use-package eshell-syntax-highlighting
   :after eshell-mode
