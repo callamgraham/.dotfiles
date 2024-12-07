@@ -51,15 +51,14 @@
 				      "dolphin-emu"
 				      "xrandr" ; for the primary_monitor script
 				      "citra" ; from my personal channel
-				      "desmume" ; gba games
-				      "mgba"
+				      "desmume" ; DS
+				      "mgba" ; gba
+				      ;; "retroarch"
 				      
 				      ;; sys admin
                                       "parted"
                                       "stow"
 				      "gnupg"
-				      "openssh"
-				      ;; "pinentry" ;; not needed with the gpg service below
 				      "dunst"
 				      "flatpak"
 				      "zip"
@@ -118,14 +117,10 @@
 				      ;; "gcc-objc:lib"
 				      ;; "gcc-objc"
                                       "git"				   
-				      ;; "python"
-				      ;; "rust"
-				      ;; "rust-cargo"
-				      ;; "rust-cargo-edit"
-				      ;; "rust-cargo-util"
-				      ;; "rust-cargo-toml"
-				      ;; "rust-analyzer"
-				      ;; "rust-clippy"
+				      "python"
+				      "rust:cargo"
+				      "rust:out"
+				      "rust:tools"
 
 				      ;; tree sitter grammars
 				      "tree-sitter-rust"
@@ -186,8 +181,17 @@ guix shell --network --container --emulate-fhs \
 			     ))
                   ))
 	;; setup ssh
-	;; (service home-ssh-agent-service-type)
+	(service home-openssh-service-type
+		 (home-openssh-configuration
+		  (hosts
+		   (list (openssh-host (name "raspberrypi")
+				       (host-name "192.168.68.56")
+				       (user "callam"))
 
+				       )))
+		 ;; (authorized-keys (list (local-file "alice.pub")))
+		 )
+	
 	;; gnupg
 	(service home-gpg-agent-service-type
 		 (home-gpg-agent-configuration

@@ -665,10 +665,10 @@
   ;; Enable in all Eshell buffers.
   (eshell-syntax-highlighting-global-mode +1))
 
-(use-package capf-autosuggest
-  :hook ((eshell-mode . capf-autosuggest-mode))
-  :custom
-  (capf-autosuggest-dwim-next-line nil))
+;; (use-package capf-autosuggest
+;;   :hook ((eshell-mode . capf-autosuggest-mode))
+;;   :custom
+;;   (capf-autosuggest-dwim-next-line nil))
 
 ;; Vterm
 (when (eq system-type 'gnu/linux)
