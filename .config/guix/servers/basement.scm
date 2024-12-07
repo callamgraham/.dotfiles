@@ -18,6 +18,9 @@
   (nongnu system linux-initrd)
   )
 
+(use-package-modules terminals certs wm xdisorg vim gl package-management)
+(use-service-modules cups desktop networking ssh xorg nix sddm docker)
+
 ;; Modify configurations of default %desktop-services
 ;; (define %my-desktop-services
 ;;   (modify-services %desktop-services
