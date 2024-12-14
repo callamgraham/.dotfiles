@@ -7,7 +7,7 @@
   (nongnu packages linux)
   (nongnu system linux-initrd))
 
-(use-package-modules terminals certs wm xdisorg vim gl package-management)
+(use-package-modules terminals certs wm xdisorg vim gl package-management version-control)
 (use-service-modules cups desktop networking ssh docker)
 
 
@@ -77,8 +77,8 @@
 			       (ruleset basement-nftables-config)))
 
 		     ;; network
-		     (network-manager-service-type)
-		     (wpa-supplicant-service-type)
+		     (service network-manager-service-type)
+		     (service wpa-supplicant-service-type)
 		     (service elogind-service-type)
 
 		     ;; enable ssh
