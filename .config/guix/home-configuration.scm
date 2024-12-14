@@ -53,7 +53,7 @@
 				      "citra" ; from my personal channel
 				      "desmume" ; DS
 				      "mgba" ; gba
-				      ;; "retroarch"
+				      "retroarch"
 				      
 				      ;; sys admin
                                       "parted"
@@ -74,6 +74,8 @@
 				      "ntfs-3g"
 				      "udiskie"
 				      "zoxide"
+				      "openssh"
+				      "fd"
 
 				      ;; UI
 				      "swayfx"
@@ -81,7 +83,7 @@
 				      "waybar"
 				      "alacritty"
 				      "openbox"
-				      "weston"
+				      ;; "weston"
 				      
 				      ;; browser
 				      "firefox" ; might want to move this to a container?
@@ -112,10 +114,9 @@
 				      "imagemagick" ;; for converting image files 
 				      
 				      ;; programming
-				      ;; "cmake"
-				      ;; "gcc-toolchain"
-				      ;; "gcc-objc:lib"
-				      ;; "gcc-objc"
+				      "cmake"
+				      "gcc-toolchain"
+				      "clang-toolchain"
                                       "git"				   
 				      "python"
 				      "rust:cargo"
@@ -140,6 +141,7 @@
                  (home-bash-configuration
 		  (environment-variables '(("XWAYLAND_DISPLAY" . "DP-3")))
                   (aliases '(("grep" . "grep --color=auto")
+			     ;; ("CC" . "gcc")
 			     ("ll" . "ls -l")
                              ("ls" . "ls -p --color=auto")
 			     ("unrar" . "unrar-free")
@@ -187,10 +189,10 @@ guix shell --network --container --emulate-fhs \
 		   (list (openssh-host (name "raspberrypi")
 				       (host-name "192.168.68.56")
 				       (user "callam"))
-
-				       )))
-		 ;; (authorized-keys (list (local-file "alice.pub")))
-		 )
+			 (openssh-host (name "basement")
+				       (host-name "192.168.68.66")
+				       (user "callam")
+				       (port 4444))))))
 	
 	;; gnupg
 	(service home-gpg-agent-service-type

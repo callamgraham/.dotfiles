@@ -1,52 +1,44 @@
-;; This is an operating system configuration generated
-;; by the graphical installer.
-;;
-;; Once installation is complete, you can learn and modify
-;; this file to tweak the system configuration, and pass it
-;; to the 'guix system reconfigure' command to effect your
-;; changes.
-
-
-;; Indicate which modules to import to access the variables
-;; used in this configuration.
+;; system declaration for the server
 (use-modules 
   (gnu)
   (gnu home services)
   (guix channels)
   (gnu packages linux)
   (nongnu packages linux)
-  (nongnu system linux-initrd)
-  )
+  (nongnu system linux-initrd))
 
 (use-package-modules terminals certs wm xdisorg vim gl package-management)
-(use-service-modules cups desktop networking ssh xorg nix sddm docker)
+(use-service-modules cups desktop networking ssh docker)
 
-;; Modify configurations of default %desktop-services
-;; (define %my-desktop-services
-;;   (modify-services %desktop-services
-;;                    ;; Configure the substitute server for the Nonguix repo
-;;                    (guix-service-type
-;;                     config =>
-;;                     (guix-configuration
-;;                      (inherit config)
-;;                      (substitute-urls
-;; 		      (append (list "https://substitutes.nonguix.org")
-;; 			      %default-substitute-urls))
-;;                      (authorized-keys
-;; 		      (append (list (plain-file "nonguix.pub" "(public-key
-;;                                                                 (ecc
-;;                                                                  (curve Ed25519)
-;;                                                                   (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)
-;;                                                                  )
-;;                                                                 )"))
-;; 			      %default-authorized-guix-keys))))
 
-;; 		   (delete gdm-service-type)
-;; 		   ))
+(define basement-nftables-config
+  (plain-file "nftables.conf"
+              "table inet filter {
+	chain input {
+		type filter hook input priority filter; policy drop;
+		ct state invalid drop
+		ct state { established, related } accept
+		iif \"lo\" accept
+		iif != \"lo\" ip daddr 127.0.0.0/8 drop
+		iif != \"lo\" ip6 daddr ::1 drop
+		ip protocol icmp accept
+		ip6 nexthdr ipv6-icmp accept
+		tcp dport 4444 accept
+		reject
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+	}
+
+	chain output {
+		type filter hook output priority filter; policy accept;
+	}
+}"))
+
 
 (operating-system
  (kernel linux)
- (sudoers-file etc-sudoers-config)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
  (locale "en_CA.utf8")
@@ -68,34 +60,33 @@
   ;; for packages and 'guix install PACKAGE' to install a package.
   (packages (append (list 
 		     vim
-		     )
+		     git)
                     %base-packages))
 
-  ;; Below is the list of system services.  To search for available
-  ;; services, run 'guix system search KEYWORD' in a terminal.
 
+  ;; system services
   (services (append (list
-		     ;; configure env variables
-		     ;; (service sddm-service-type
-		     ;; 	      (sddm-configuration
-		     ;; 	       ;; (display-server "wayland")
-		     ;; 	       (themes-directory "/run/current-system/profile/share/sddm/themes")
-		     ;; 	       (theme "abstractdark")
-		     ;; 	       ;; (theme "sugar-dark")
-		     ;; 	       ))
 
 		     ;; containers
 		     (service containerd-service-type)
 		     (service docker-service-type)
 
 		     ;; firewall
-		     (service nftables-service-type)
+		     (service nftables-service-type
+			      (nftables-configuration
+			       (ruleset basement-nftables-config)))
+
+		     ;; network
+		     (network-manager-service-type)
+		     (wpa-supplicant-service-type)
+		     (service elogind-service-type)
 
 		     ;; enable ssh
 		     (service openssh-service-type
-                                   (openssh-configuration
-                                    (openssh openssh-sans-x)
-                                    (port-number 4444)))
+                              (openssh-configuration
+			       (authorized-keys
+				'(("callam", (local-file "basement.pub"))))
+                               (port-number 4444)))
 		     
 		     ;; Channels
 		     (simple-service 'variant-packages-service
@@ -111,26 +102,27 @@
 					  "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
 				      )))
 		    %base-services))
-  
+
+  ;; bootloader
   (bootloader (bootloader-configuration
                 (bootloader grub-efi-bootloader)
                 (targets (list "/boot/efi"))
                 (keyboard-layout keyboard-layout)))
+
+  ;;swap space
   (swap-devices (list (swap-space
 		       (target "/dev/nvme0n1p2") ; need to update this!
 		       )))
 
-  ;; The list of file systems that get "mounted".  The unique
-  ;; file system identifiers there ("UUIDs") can be obtained
-  ;; by running 'blkid' in a terminal.
+  ;; file system mounts
   (file-systems (cons* (file-system
-                         (mount-point "/")
-                         (device "/dev/nvme0n1p3")
-                         (type "ext4"))
+                        (mount-point "/")
+                        (device "/dev/nvme0n1p3")
+                        (type "ext4"))
 		       
                        (file-system
-                         (mount-point "/boot/efi")
-                         (device "/dev/nvme0n1p1")
-                         (type "vfat"))
+                        (mount-point "/boot/efi")
+                        (device "/dev/nvme0n1p1")
+                        (type "vfat"))
 		       
 		       %base-file-systems)))

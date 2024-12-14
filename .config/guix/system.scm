@@ -56,6 +56,31 @@ root      ALL=(ALL) ALL
 callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home/callam/.guix-home/profile/sbin/reboot"))
 
 
+(define desktop-nftables-config
+  (plain-file "nftables.conf"
+              "table inet filter {
+	chain input {
+		type filter hook input priority filter; policy drop;
+		ct state invalid drop
+		ct state { established, related } accept
+		iif \"lo\" accept
+		iif != \"lo\" ip daddr 127.0.0.0/8 drop
+		iif != \"lo\" ip6 daddr ::1 drop
+		ip protocol icmp accept
+		ip6 nexthdr ipv6-icmp accept
+		tcp dport 4444 accept
+		reject
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+	}
+
+	chain output {
+		type filter hook output priority filter; policy accept;
+	}
+}"))
+
 (operating-system
  (kernel linux)
  (sudoers-file etc-sudoers-config)
@@ -116,7 +141,8 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 		     (service docker-service-type)
 
 		     ;; firewall
-		     (service nftables-service-type)
+		     (service nftables-service-type
+			      (nftables-configuration desktop-nftables-config))
 
 		     ;; Channels
 		     (simple-service 'variant-packages-service

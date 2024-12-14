@@ -545,6 +545,11 @@
   (global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
   (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point)
 
+  ; this improves LSP performance - as per LSP docs
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+
   (use-package lsp-mode
     :commands lsp
     :custom
