@@ -543,6 +543,7 @@
 ; lsp keybindings
 (when (eq system-type 'gnu/linux)
   (global-set-key (kbd "C-M-c C-z") 'lsp-find-definition)
+  (global-set-key (kbd "C-M-c C-M-n") 'lsp-execute-code-action)
   (global-set-key (kbd "C-M-c C-v") 'lsp-describe-thing-at-point)
 
   ; this improves LSP performance - as per LSP docs

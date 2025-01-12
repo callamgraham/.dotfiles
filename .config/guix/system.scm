@@ -69,6 +69,7 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 		ip protocol icmp accept
 		ip6 nexthdr ipv6-icmp accept
 		tcp dport 4444 accept
+		tcp dport 47474 accept
 		reject
 	}
 
@@ -142,7 +143,24 @@ callam    ALL=(ALL) NOPASSWD:/home/callam/.guix-home/profile/sbin/shutdown,/home
 
 		     ;; firewall
 		     (service nftables-service-type
-			      (nftables-configuration desktop-nftables-config))
+			      (nftables-configuration (ruleset desktop-nftables-config)))
+
+		     ;; yggdrasil
+		     (service yggdrasil-service-type
+			      (yggdrasil-configuration
+			       (autoconf? #f) ;; use only the public peers
+			       (config-file "/home/callam/.dotfiles/.config/guix/yggdrasil/yggdrasil-private-desktop.conf")
+			       (json-config
+				;; choose one from
+				;; https://github.com/yggdrasil-network/public-peers
+				;;'((peers . #("tcp://1.2.3.4:1337"))))
+				'(
+				  ;; (listen . #("tcp://[::]:47474"))
+				  (listen . #("tls://0.0.0.0:47474"))
+				  )
+				)
+			       ;; /etc/yggdrasil-private.conf is the default value for config-file
+			       ))
 
 		     ;; Channels
 		     (simple-service 'variant-packages-service

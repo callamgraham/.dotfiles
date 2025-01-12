@@ -67,7 +67,7 @@
 				      "xdg-user-dirs"
 				      "p7zip"
 				      "neofetch" ; shows user info
-				      "pantalaimon" ; for ement encrypted
+				      ;; "pantalaimon" ; for ement encrypted
 				      "ripgrep"
 				      "rsync"
 				      "htop"
@@ -188,9 +188,11 @@ guix shell --network --container --emulate-fhs \
 		  (hosts
 		   (list (openssh-host (name "raspberrypi")
 				       (host-name "192.168.68.56")
+				       (identity-file "~/.ssh/raspberrypi")
 				       (user "callam"))
 			 (openssh-host (name "basement")
-				       (host-name "192.168.68.66")
+				       (host-name "192.168.68.72")
+				       (identity-file "~/.ssh/basement")
 				       (user "callam")
 				       (port 4444))))))
 	
